@@ -9,6 +9,7 @@ Admin panelinden yönetilen, tamamen dinamik kişisel portfolyo sitesi.
 
 ## İçindekiler
 
+- [Ekran Görüntüleri](#ekran-görüntüleri)
 - [Kurulum](#kurulum)
 - [Modüller](#modüller)
 - [Yapılan Geliştirmeler](#yapılan-geliştirmeler)
@@ -18,13 +19,41 @@ Admin panelinden yönetilen, tamamen dinamik kişisel portfolyo sitesi.
 
 ---
 
+## Ekran Görüntüleri
+
+### Site
+
+| Ana Sayfa | Hakkımda |
+|---|---|
+| ![Ana sayfa](docs/screenshots/01-ana-sayfa.jpg) | ![Hakkımda](docs/screenshots/02-hakkimda.jpg) |
+| **Yetenekler (seviye çubukları)** | **Projeler (kategori filtresi ve sıralama)** |
+| ![Yetenekler](docs/screenshots/03-yetenekler.jpg) | ![Projeler](docs/screenshots/04-projeler.jpg) |
+
+**İletişim formu**
+
+![İletişim](docs/screenshots/05-iletisim.jpg)
+
+### Admin Paneli
+
+| Dashboard | Projeler |
+|---|---|
+| ![Dashboard](docs/screenshots/06-dashboard.jpg) | ![Admin projeler](docs/screenshots/07-admin-projeler.jpg) |
+| **Proje formu (görsel yükleme, kategori dropdown)** | **Gelen kutusu — mesaj detay modalı** |
+| ![Proje formu](docs/screenshots/08-proje-formu.jpg) | ![Gelen kutusu](docs/screenshots/09-gelen-kutusu-modal.jpg) |
+
+**Yetenekler (gruplar ve 0-100 seviye)**
+
+![Admin yetenekler](docs/screenshots/10-admin-yetenekler.jpg)
+
+---
+
 ## Kurulum
 
 **Gereksinimler:** .NET 10 SDK, SQL Server (Express veya LocalDB de olur), isteğe bağlı Visual Studio 2022+.
 
 ```bash
 # 1. Depoyu klonlayın
-git clone <repo-adresi>
+git clone https://github.com/cerendilay/MYAcademy_PortfolioProject.git
 cd MYAcademy_PortfolioProject
 
 # 2. Bağlantı dizesini kendi SQL Server'ınıza göre düzenleyin
@@ -47,7 +76,7 @@ Visual Studio kullanıyorsanız 3. adım yerine *Package Manager Console* üzeri
 
 Veritabanı boş oluşur. Önerilen içerik giriş sırası: **Ana Sayfa → Hakkımda → İletişim & Sosyal Medya → Proje Kategorileri → Projeler → Yetenekler → Deneyimler → Eğitim**.
 
-> Yüklenen görseller `wwwroot/uploads/` klasörüne kaydedilir ve git'e dahil edilmez.
+> Yüklenen görseller `wwwroot/uploads/` klasörüne kaydedilir. Proje görselleri (`uploads/projects`) depoya dahildir; profil fotoğrafı (`uploads/about`) dahil değildir.
 
 ---
 
@@ -136,4 +165,4 @@ MYAcademy_PortfolioProject/
 ## Bilinen Sınırlamalar
 
 - Admin paneline giriş / yetkilendirme yoktur (case kapsamında istenmedi). Yayına alınmadan önce eklenmelidir.
-- Yüklenen görseller git'e dahil edilmediği için depoyu klonlayan kişi kendi görsellerini yüklemelidir.
+- Veritabanı boş oluştuğu için depoyu klonlayan kişi içerikleri (ve profil fotoğrafını) admin panelinden kendisi girmelidir.
