@@ -1139,6 +1139,57 @@
             opacity: 1;
         }
 
+    /* ---------- Ekleme / Güncelleme formları ---------- */
+    .form-card {
+        background: #FFFFFF;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 1.75rem;
+        max-width: 880px;
+    }
+
+    .form-card .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* Data Annotations doğrulama mesajları */
+    .field-validation-error,
+    .validation-summary-errors {
+        color: var(--state-danger-text);
+        font-size: 0.75rem;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .validation-summary-errors ul {
+        margin: 0;
+        padding-left: 1rem;
+    }
+
+    .input-validation-error {
+        border-color: var(--state-danger-text) !important;
+        background-color: #FFF8F7 !important;
+    }
+
+    /* Boş liste durumu */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--text-secondary);
+    }
+
+    .empty-state i {
+        font-size: 2.25rem;
+        opacity: 0.5;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
     /* Responsive Queries */
     @@media (max-width: 1199.98px) {
         .stats-row {

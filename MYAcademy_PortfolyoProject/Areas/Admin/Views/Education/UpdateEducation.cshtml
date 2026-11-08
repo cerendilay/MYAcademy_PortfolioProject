@@ -1,0 +1,27 @@
+@model Education
+@{
+    ViewData["Title"] = "Eğitimi Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Eğitimi Güncelle</h1>
+            <p class="page-subtitle">@Model.Title — @Model.SchoolName</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="UpdateEducation" method="post">
+            <partial name="_EducationForm" model="Model" />
+
+            <div class="form-actions">
+                <a asp-action="EducationList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">
+                    <i class="bi bi-check-lg"></i> <span>Güncelle</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

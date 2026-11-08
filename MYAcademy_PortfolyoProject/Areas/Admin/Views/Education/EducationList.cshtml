@@ -1,0 +1,98 @@
+@model List<Education>
+@{
+    ViewData["Title"] = "Eğitim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Eğitim Bilgilerim</h1>
+            <p class="page-subtitle">Sitedeki "Eğitim Hayatım" bölümünde gösterilen kayıtları buradan yönetebilirsiniz.</p>
+        </div>
+        <div class="header-actions">
+            <a asp-action="CreateEducation" class="btn-pastel-primary text-decoration-none">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Eğitim Ekle</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">Sıra</th>
+                        <th>Bölüm / Program</th>
+                        <th>Okul</th>
+                        <th>Derece</th>
+                        <th>Yıllar</th>
+                        <th>Durum</th>
+                        <th style="text-align: right; width: 120px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><span class="order-badge">@item.DisplayOrder</span></td>
+                            <td>
+                                <div class="experience-title-cell">
+                                    <div class="exp-icon-bullet"><i class="bi bi-mortarboard"></i></div>
+                                    <span class="exp-title-text">@item.Title</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="company-cell">
+                                    <i class="bi bi-building company-badge-icon"></i>
+                                    <span>@item.SchoolName</span>
+                                </div>
+                            </td>
+                            <td><span class="work-type-badge">@item.Degree</span></td>
+                            <td>
+                                <span class="date-badge">
+                                    <i class="bi bi-calendar2-range"></i>
+                                    @item.StartYear - @(item.EndYear?.ToString() ?? "Devam Ediyor")
+                                </span>
+                            </td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="status-pill status-active">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="status-pill status-passive">Pasif</span>
+                                }
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <a asp-action="UpdateEducation" asp-route-id="@item.EducationId"
+                                       class="btn-action-icon btn-edit" title="Güncelle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form asp-action="DeleteEducation" asp-route-id="@item.EducationId" method="post"
+                                          class="js-confirm-delete d-inline" data-item-name="@item.Title">
+                                        <button type="submit" class="btn-action-icon btn-delete" title="Sil">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (!Model.Any())
+            {
+                <div class="empty-state">
+                    <i class="bi bi-mortarboard"></i>
+                    Henüz eğitim bilgisi eklenmemiş.
+                </div>
+            }
+        </div>
+    </div>
+</main>

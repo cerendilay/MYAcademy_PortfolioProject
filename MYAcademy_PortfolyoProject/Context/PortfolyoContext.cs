@@ -20,5 +20,6 @@ namespace MYAcademy_PortfolyoProject.Context
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Education> Educations { get; set; }
     }
 }

@@ -1,0 +1,62 @@
+@model Education
+@* Ekleme ve güncelleme sayfalarının ortak form alanları *@
+
+<div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-3"></div>
+<input type="hidden" asp-for="EducationId" />
+
+<div class="row g-3">
+    <div class="col-md-8">
+        <label asp-for="Title" class="form-label-custom">Bölüm / Program <span class="required-star">*</span></label>
+        <input asp-for="Title" class="form-control-custom" placeholder="Örn: Bilgisayar Mühendisliği" />
+        <span asp-validation-for="Title"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Degree" class="form-label-custom">Derece <span class="required-star">*</span></label>
+        <input asp-for="Degree" class="form-control-custom" placeholder="Örn: Lisans" list="degreeOptions" />
+        <datalist id="degreeOptions">
+            <option value="Lise"></option>
+            <option value="Ön Lisans"></option>
+            <option value="Lisans"></option>
+            <option value="Yüksek Lisans"></option>
+            <option value="Doktora"></option>
+            <option value="Sertifika / Eğitim"></option>
+        </datalist>
+        <span asp-validation-for="Degree"></span>
+    </div>
+
+    <div class="col-md-12">
+        <label asp-for="SchoolName" class="form-label-custom">Okul / Kurum <span class="required-star">*</span></label>
+        <input asp-for="SchoolName" class="form-control-custom" placeholder="Örn: Ondokuz Mayıs Üniversitesi" />
+        <span asp-validation-for="SchoolName"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="StartYear" class="form-label-custom">Başlangıç Yılı <span class="required-star">*</span></label>
+        <input asp-for="StartYear" type="number" class="form-control-custom" placeholder="2020" />
+        <span asp-validation-for="StartYear"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="EndYear" class="form-label-custom">Bitiş Yılı</label>
+        <input asp-for="EndYear" type="number" class="form-control-custom" placeholder="Devam ediyorsa boş bırakın" />
+        <span asp-validation-for="EndYear"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="DisplayOrder" class="form-label-custom">Sıra</label>
+        <input asp-for="DisplayOrder" type="number" class="form-control-custom" />
+        <span asp-validation-for="DisplayOrder"></span>
+    </div>
+
+    <div class="col-md-12">
+        <label asp-for="Description" class="form-label-custom">Açıklama</label>
+        <textarea asp-for="Description" class="form-control-custom" rows="4"
+                  placeholder="Bu eğitimde odaklandığınız konular, projeler..."></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-check form-switch">
+            <input asp-for="IsActive" class="form-check-input" type="checkbox" role="switch" />
+            <label asp-for="IsActive" class="form-check-label">Sitede göster</label>
+        </div>
+    </div>
+</div>

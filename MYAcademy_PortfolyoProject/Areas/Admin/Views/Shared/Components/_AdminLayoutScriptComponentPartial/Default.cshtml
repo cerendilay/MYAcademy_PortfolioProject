@@ -1,179 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<script>
-    // Mobile Sidebar Toggle
-    const sidebar = document.getElementById('adminSidebar');
+﻿<script>
+    // ---------- Mobil sidebar aç/kapat ----------
+    const adminSidebar = document.getElementById('adminSidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
 
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('show-sidebar');
-    });
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => adminSidebar.classList.toggle('show-sidebar'));
 
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 991.98) {
-            if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-                sidebar.classList.remove('show-sidebar');
-            }
-        }
-    });
-
-    // Select All Checkbox Handler
-    const selectAll = document.getElementById('selectAllCheckbox');
-    const rowCheckboxes = document.querySelectorAll('.row-select-checkbox');
-
-    selectAll.addEventListener('change', () => {
-        rowCheckboxes.forEach(cb => {
-            cb.checked = selectAll.checked;
-        });
-    });
-
-    // Search Filter Table
-    const searchInput = document.getElementById('tableSearchInput');
-    const statusFilter = document.getElementById('statusFilterSelect');
-    const tableRows = document.querySelectorAll('#experienceTableBody tr');
-
-    function filterTable() {
-        const query = searchInput.value.toLowerCase().trim();
-        const statusVal = statusFilter.value;
-
-        tableRows.forEach(row => {
-            const title = row.querySelector('.exp-title-text').innerText.toLowerCase();
-            const company = row.querySelector('.company-cell span').innerText.toLowerCase();
-            const status = row.getAttribute('data-status');
-
-            const matchesQuery = title.includes(query) || company.includes(query);
-            const matchesStatus = (statusVal === 'all') || (status === statusVal);
-
-            if (matchesQuery && matchesStatus) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 991.98 &&
+                !adminSidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                adminSidebar.classList.remove('show-sidebar');
             }
         });
     }
 
-    searchInput.addEventListener('input', filterTable);
-    statusFilter.addEventListener('change', filterTable);
-
-    // Sorting
-    const sortSelect = document.getElementById('sortSelect');
-    sortSelect.addEventListener('change', () => {
-        const tbody = document.getElementById('experienceTableBody');
-        const rows = Array.from(tableRows);
-
-        if (sortSelect.value === 'order-asc') {
-            rows.sort((a, b) => parseInt(a.dataset.order) - parseInt(b.dataset.order));
-        } else if (sortSelect.value === 'order-desc') {
-            rows.sort((a, b) => parseInt(b.dataset.order) - parseInt(a.dataset.order));
-        } else if (sortSelect.value === 'title-asc') {
-            rows.sort((a, b) => {
-                const titleA = a.querySelector('.exp-title-text').innerText;
-                const titleB = b.querySelector('.exp-title-text').innerText;
-                return titleA.localeCompare(titleB, 'tr');
-            });
-        }
-
-        rows.forEach(r => tbody.appendChild(r));
-        showToast('Sıralama Güncellendi', 'Deneyimler seçilen kritere göre dizildi.');
-    });
-
-    // Modal Handlers
-    const modal = document.getElementById('experienceModal');
-    function openAddModal() {
-        document.getElementById('modalTitle').innerText = 'Yeni Deneyim Ekle';
-        document.getElementById('modalInputTitle').value = '';
-        document.getElementById('modalInputCompany').value = '';
-        document.getElementById('modalInputStartDate').value = '';
-        document.getElementById('modalInputEndDate').value = '';
-        modal.classList.add('show');
-    }
-
-    function closeModal() {
-        modal.classList.remove('show');
-    }
-
-    function handleModalSubmit(e) {
-        e.preventDefault();
-        closeModal();
-        showToast('Kayıt Eklendi', 'Yeni deneyim kaydı başarıyla oluşturuldu.');
-    }
-
-    function handleFormSubmit(e) {
-        e.preventDefault();
-        showToast('Kaydedildi', 'Deneyim kaydı portfolyo veritabanına aktarıldı.');
-    }
-
-    // Toast Functionality
-    function showToast(title, message) {
+    // ---------- Toast bildirimi ----------
+    function showToast(title, message, isError = false) {
         const toast = document.getElementById('actionToast');
+        const icon = document.getElementById('toastIcon');
         document.getElementById('toastTitle').innerText = title;
         document.getElementById('toastMsg').innerText = message;
+        icon.className = isError
+            ? 'bi bi-x-circle-fill text-danger'
+            : 'bi bi-check-circle-fill text-success';
+        toast.style.borderLeftColor = isError ? '#C97064' : '#7DAA8B';
         toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3200);
+        setTimeout(() => toast.classList.remove('show'), 3200);
     }
 
-    // CRUD Actions
-    function viewRecord(id) {
-        showToast('Önizleme', '#' + id + ' numaralı deneyim detayları görüntülendi.');
-    }
+    // Controller'dan TempData ile gelen mesaj varsa göster
+    (function () {
+        const toast = document.getElementById('actionToast');
+        if (toast.dataset.success) showToast('Başarılı', toast.dataset.success);
+        else if (toast.dataset.error) showToast('Hata', toast.dataset.error, true);
+    })();
 
-    function editRecord(id) {
-        document.getElementById('modalTitle').innerText = 'Deneyimi Düzenle (ID: #' + id + ')';
-        if (id === 1) {
-            document.getElementById('modalInputTitle').value = 'Kıdemli Frontend Geliştirici';
-            document.getElementById('modalInputCompany').value = 'Nova Digital Studio';
-            document.getElementById('modalInputStartDate').value = 'Ocak 2022';
-            document.getElementById('modalInputEndDate').value = 'Devam Ediyor';
-        }
-        modal.classList.add('show');
-    }
+    // ---------- Silme onayı (SweetAlert2) ----------
+    // Kullanım: <form method="post" class="js-confirm-delete" data-item-name="..."> ... </form>
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (!form.classList.contains('js-confirm-delete') || form.dataset.confirmed) return;
 
-    function deleteRecord(id) {
-        if (confirm('#0' + id + ' numaralı kaydı silmek istediğinize emin misiniz?')) {
-            const row = document.querySelector(`tr[data-id="${id}"]`);
-            if (row) {
-                row.style.opacity = '0';
-                setTimeout(() => {
-                    row.remove();
-                    showToast('Kayıt Silindi', 'Deneyim kaydı başarıyla kaldırıldı.');
-                }, 200);
+        e.preventDefault();
+        // Kayıt adı HTML olarak yorumlanmasın diye önce metne çevrilir (XSS önlemi)
+        const safeName = document.createElement('b');
+        safeName.textContent = form.dataset.itemName || 'Bu kayıt';
+
+        Swal.fire({
+            title: 'Emin misiniz?',
+            html: `${safeName.outerHTML} kalıcı olarak silinecek. Bu işlem geri alınamaz.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Evet, sil',
+            cancelButtonText: 'Vazgeç',
+            confirmButtonColor: '#C97064',
+            cancelButtonColor: '#9BB7A2',
+            reverseButtons: true
+        }).then(result => {
+            if (result.isConfirmed) {
+                form.dataset.confirmed = 'true';
+                form.submit();
             }
-        }
-    }
-
-    // Helper checkbox toggle
-    function toggleOngoingDate(cb) {
-        const endInput = document.getElementById('endDateInput');
-        if (cb.checked) {
-            endInput.value = 'Devam Ediyor';
-            endInput.disabled = true;
-        } else {
-            endInput.value = '';
-            endInput.disabled = false;
-        }
-    }
-
-    // Buttons quick listeners
-    document.getElementById('btnRefreshTable').addEventListener('click', () => {
-        searchInput.value = '';
-        statusFilter.value = 'all';
-        filterTable();
-        showToast('Yenilendi', 'Tablo verileri tazelendi.');
-    });
-
-    document.getElementById('btnExport').addEventListener('click', () => {
-        showToast('Dışa Aktarma', 'Deneyim kayıtları CSV/Excel formatında hazırlandı.');
-    });
-
-    document.getElementById('btnLogout').addEventListener('click', () => {
-        if (confirm('Yönetim panelinden çıkış yapmak istiyor musunuz?')) {
-            showToast('Oturum Kapatılıyor', 'Giriş ekranına yönlendiriliyorsunuz...');
-        }
+        });
     });
 </script>

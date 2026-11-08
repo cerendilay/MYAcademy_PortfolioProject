@@ -362,61 +362,7 @@
     </section>
 
     <!-- 9. Education Section -->
-    <section id="education" class="bg-white border-top border-bottom">
-      <div class="container">
-        <div class="row gy-5">
-          <!-- Left: Timeline -->
-          <div class="col-lg-7 reveal-on-scroll">
-            <div class="eyebrow-badge">
-              <i class="bi bi-mortarboard-fill"></i> AKADEMİK YOLCULUK
-            </div>
-            <h2 class="section-title mb-4">
-              Eğitim Hayatım
-            </h2>
-
-            <div class="d-flex flex-column gap-4">
-              <!-- Degree 1 -->
-              <div class="p-4 rounded-4 border bg-light">
-                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                  <h3 class="h5 fw-bold mb-0">Yüksek Lisans — İnternet ve Bilişim Teknolojileri Yönetimi</h3>
-                  <span class="badge bg-secondary-subtle text-dark">Akademik</span>
-                </div>
-                <p class="text-muted small mb-0">
-                  Yapay zeka ajanları, büyük dil modelleri ve akıllı sistemler üzerine akademik çalışmalar.
-                </p>
-              </div>
-
-              <!-- Degree 2 -->
-              <div class="p-4 rounded-4 border bg-light">
-                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                  <h3 class="h5 fw-bold mb-0">Ön Lisans — Turizm ve Seyahat Hizmetleri</h3>
-                  <span class="badge bg-secondary-subtle text-dark">Mezuniyet</span>
-                </div>
-                <div class="text-muted fw-semibold small mb-2 font-heading">
-                  Anadolu Üniversitesi
-                </div>
-                <p class="text-muted small mb-0">
-                  Kişilerarası iletişim, kriz yönetimi ve analitik problem çözme yetkinliklerinin temeli.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Learning Philosophy Quote -->
-          <div class="col-lg-5 ps-lg-4 d-flex align-items-center reveal-on-scroll">
-            <div class="p-4 p-md-5 rounded-4 border w-100" style="background-color: var(--bg-primary);">
-              <i class="bi bi-quote fs-1 text-muted opacity-50"></i>
-              <blockquote class="fs-4 fw-bold font-heading my-3 text-dark">
-                "Öğrenmek bir varış noktası değil, sürekli devam eden bir yolculuktur."
-              </blockquote>
-              <p class="text-muted small mb-0 lh-lg">
-                Yazılım dünyasındaki hızlı dönüşüm; sürekli araştırmayı, yeni paradigmaları benimsemeyi ve edinilen bilgi birikimini cömertçe paylaşmayı gerektirir.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    @await Component.InvokeAsync("_DefaultEducationComponentPartial")
 
     <!-- 10. Personal Philosophy Section -->
     <section class="philosophy-section text-center">

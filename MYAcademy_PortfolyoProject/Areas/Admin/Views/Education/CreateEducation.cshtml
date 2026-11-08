@@ -1,0 +1,27 @@
+@model Education
+@{
+    ViewData["Title"] = "Yeni Eğitim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yeni Eğitim Ekle</h1>
+            <p class="page-subtitle">Yıldızlı (*) alanların doldurulması zorunludur.</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="CreateEducation" method="post">
+            <partial name="_EducationForm" model="Model" />
+
+            <div class="form-actions">
+                <a asp-action="EducationList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">
+                    <i class="bi bi-check-lg"></i> <span>Kaydet</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
