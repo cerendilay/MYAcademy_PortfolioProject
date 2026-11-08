@@ -1,26 +1,132 @@
 ﻿@model List<Project>
-
 @{
-    ViewData["Title"] = "ProjectList";
+    ViewData["Title"] = "Projelerim";
     Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+
+    int total = ViewBag.TotalCount;
+    int active = ViewBag.ActiveCount;
+    string? selectedStatus = ViewBag.SelectedStatus;
+    string selectedSort = ViewBag.SelectedSort;
 }
 
-<div class="container">
-    <br />
-    <table class="table table-bordered">
-        <tr>
-            <th>#</th>
-            <th>Proje Adı</th>
-            <th>Kategori</th>
-        </tr>
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Projelerim</h1>
+            <p class="page-subtitle">Pasif projeler burada yönetilebilir ancak sitede listelenmez.</p>
+        </div>
+        <div class="header-actions">
+            <a asp-controller="Category" asp-action="CategoryList" class="btn-pastel-secondary text-decoration-none">
+                <i class="bi bi-tags"></i> <span>Kategoriler</span>
+            </a>
+            <a asp-action="CreateProject" class="btn-pastel-primary text-decoration-none">
+                <i class="bi bi-plus-circle-fill"></i> <span>Yeni Proje Ekle</span>
+            </a>
+        </div>
+    </div>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.ProjectId</td>
-                <td>@item.ProjectTitle</td>
-                <td>@item.Category.CategoryId</td>
-            </tr>
-        }
-    </table>
-</div>
+    <div class="stats-row" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-green"><i class="bi bi-code-slash"></i></div>
+            <div class="stat-content"><span class="stat-label">Toplam Proje</span><h3 class="stat-value">@total</h3></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-blue"><i class="bi bi-eye"></i></div>
+            <div class="stat-content"><span class="stat-label">Aktif (Sitede)</span><h3 class="stat-value">@active</h3></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-beige"><i class="bi bi-eye-slash"></i></div>
+            <div class="stat-content"><span class="stat-label">Pasif</span><h3 class="stat-value">@(total - active)</h3></div>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+        <!-- Filtreler: GET formu, seçim değişince otomatik gönderilir -->
+        <form method="get" asp-action="ProjectList" class="table-filter-bar" id="projectFilterForm">
+            <div class="filters-left-group">
+                <select name="categoryId" asp-items="ViewBag.Categories" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Tüm Kategoriler</option>
+                </select>
+                <select name="status" class="filter-select" onchange="this.form.submit()">
+                    <option value="" selected="@(string.IsNullOrEmpty(selectedStatus))">Durum (Tümü)</option>
+                    <option value="active" selected="@(selectedStatus == "active")">Aktif</option>
+                    <option value="passive" selected="@(selectedStatus == "passive")">Pasif</option>
+                </select>
+                <select name="sort" class="filter-select" onchange="this.form.submit()">
+                    <option value="newest" selected="@(selectedSort == "newest")">Sıralama: En yeni proje</option>
+                    <option value="oldest" selected="@(selectedSort == "oldest")">Sıralama: En eski proje</option>
+                    <option value="recentlyAdded" selected="@(selectedSort == "recentlyAdded")">Sıralama: Son eklenen</option>
+                    <option value="title" selected="@(selectedSort == "title")">Sıralama: Ada göre (A-Z)</option>
+                </select>
+            </div>
+            <div class="filters-right-group">
+                <a asp-action="ProjectList" class="btn-table-util text-decoration-none" title="Filtreleri temizle">
+                    <i class="bi bi-x-circle"></i> <span class="d-none d-md-inline">Temizle</span>
+                </a>
+            </div>
+        </form>
+
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 84px;">Görsel</th>
+                        <th>Proje</th>
+                        <th>Kategori</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                        <th style="text-align: right; width: 120px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                {
+                                    <img src="@item.ImageUrl" alt="" class="rounded-2 border" style="width: 64px; height: 44px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <div class="rounded-2 border d-flex align-items-center justify-content-center text-muted" style="width: 64px; height: 44px;">
+                                        <i class="bi bi-image"></i>
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <span class="exp-title-text d-block">@item.ProjectTitle</span>
+                                <small class="text-muted">@string.Join(" · ", item.GetTechnologyList().Take(4))</small>
+                            </td>
+                            <td><span class="work-type-badge">@item.Category?.CategoryName</span></td>
+                            <td><span class="date-badge"><i class="bi bi-calendar3"></i> @item.ProjectDate?.ToString("MMM yyyy")</span></td>
+                            <td>
+                                <form asp-action="ToggleStatus" asp-route-id="@item.ProjectId" method="post" class="d-inline">
+                                    <button type="submit" class="border-0 bg-transparent p-0" title="Durumu değiştirmek için tıklayın">
+                                        <span class="status-pill @(item.IsActive ? "status-active" : "status-passive")">@(item.IsActive ? "Aktif" : "Pasif")</span>
+                                    </button>
+                                </form>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <a asp-action="UpdateProject" asp-route-id="@item.ProjectId" class="btn-action-icon btn-edit" title="Güncelle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form asp-action="DeleteProject" asp-route-id="@item.ProjectId" method="post"
+                                          class="js-confirm-delete d-inline" data-item-name="@item.ProjectTitle">
+                                        <button type="submit" class="btn-action-icon btn-delete" title="Sil"><i class="bi bi-trash3"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (!Model.Any())
+            {
+                <div class="empty-state"><i class="bi bi-folder2-open"></i>Bu filtreye uygun proje bulunamadı.</div>
+            }
+        </div>
+    </div>
+</main>

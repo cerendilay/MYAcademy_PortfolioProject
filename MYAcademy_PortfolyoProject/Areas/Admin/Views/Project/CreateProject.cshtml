@@ -1,0 +1,25 @@
+@model Project
+@{
+    ViewData["Title"] = "Yeni Proje";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yeni Proje Ekle</h1>
+            <p class="page-subtitle">Yıldızlı (*) alanların doldurulması zorunludur.</p>
+        </div>
+    </div>
+
+    <div class="form-card" style="max-width: 1100px;">
+        <!-- Görsel yükleneceği için enctype="multipart/form-data" -->
+        <form asp-action="CreateProject" method="post" enctype="multipart/form-data">
+            <partial name="_ProjectForm" model="Model" />
+            <div class="form-actions">
+                <a asp-action="ProjectList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary"><i class="bi bi-check-lg"></i> <span>Kaydet</span></button>
+            </div>
+        </form>
+    </div>
+</main>

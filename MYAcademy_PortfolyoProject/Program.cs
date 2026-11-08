@@ -1,6 +1,11 @@
 using MYAcademy_PortfolyoProject.Context;
 using MYAcademy_PortfolyoProject.Services;
 
+// Tarih/ay adlarının (ör. "Kas 2026") sunucunun dilinden bağımsız olarak Türkçe gösterilmesi için
+var turkishCulture = new System.Globalization.CultureInfo("tr-TR");
+System.Globalization.CultureInfo.DefaultThreadCurrentCulture = turkishCulture;
+System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = turkishCulture;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();

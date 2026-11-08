@@ -1,0 +1,92 @@
+@model Project
+@{
+    bool isCreate = Model.ProjectId == 0;
+}
+
+<div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-3"></div>
+<input type="hidden" asp-for="ProjectId" />
+
+<div class="row g-4">
+    <!-- Görsel -->
+    <div class="col-lg-4">
+        <label class="form-label-custom">Proje Görseli @if (isCreate) { <span class="required-star">*</span> }</label>
+        <img id="imagePreview" src="@(Model.ImageUrl ?? "")" alt="Görsel önizleme"
+             class="rounded-3 border w-100 mb-2 @(string.IsNullOrEmpty(Model.ImageUrl) ? "d-none" : "")"
+             style="aspect-ratio: 16 / 10; object-fit: cover;" />
+        <div id="imagePlaceholder" class="empty-state border rounded-3 mb-2 @(string.IsNullOrEmpty(Model.ImageUrl) ? "" : "d-none")">
+            <i class="bi bi-image"></i> Görsel seçilmedi
+        </div>
+        <input type="file" name="imageFile" id="imageFile" class="form-control form-control-sm" accept=".jpg,.jpeg,.png,.webp" />
+        @Html.ValidationMessage("imageFile")
+        <small class="text-muted d-block mt-1">
+            JPG, PNG veya WEBP · en fazla 2 MB.
+            @if (!isCreate) { <text>Değiştirmek istemiyorsanız boş bırakın.</text> }
+        </small>
+    </div>
+
+    <!-- Bilgiler -->
+    <div class="col-lg-8">
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label asp-for="ProjectTitle" class="form-label-custom">Proje Adı <span class="required-star">*</span></label>
+                <input asp-for="ProjectTitle" class="form-control-custom" />
+                <span asp-validation-for="ProjectTitle"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="CategoryId" class="form-label-custom">Kategori <span class="required-star">*</span></label>
+                <!-- Kategoriler veritabanından gelir -->
+                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control-custom">
+                    <option value="0">-- Seçiniz --</option>
+                </select>
+                <span asp-validation-for="CategoryId"></span>
+                <a asp-controller="Category" asp-action="CreateCategory" class="small" target="_blank">+ Yeni kategori</a>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+                <textarea asp-for="Description" class="form-control-custom" rows="5"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Technologies" class="form-label-custom">Teknolojiler <span class="required-star">*</span></label>
+                <input asp-for="Technologies" class="form-control-custom" placeholder="Virgülle ayırın: Flutter, FastAPI, PostgreSQL" />
+                <span asp-validation-for="Technologies"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="ProjectDate" class="form-label-custom">Proje Tarihi <span class="required-star">*</span></label>
+                <input asp-for="ProjectDate" type="date" class="form-control-custom" />
+                <span asp-validation-for="ProjectDate"></span>
+            </div>
+            <div class="col-md-8">
+                <label asp-for="GithubUrl" class="form-label-custom">GitHub Adresi</label>
+                <input asp-for="GithubUrl" class="form-control-custom" placeholder="https://github.com/kullanici/proje" />
+                <span asp-validation-for="GithubUrl"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="LiveUrl" class="form-label-custom">Canlı Demo Adresi</label>
+                <input asp-for="LiveUrl" class="form-control-custom" placeholder="https://..." />
+                <span asp-validation-for="LiveUrl"></span>
+            </div>
+
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input asp-for="IsActive" class="form-check-input" type="checkbox" role="switch" />
+                    <label asp-for="IsActive" class="form-check-label">Aktif (sitede göster)</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('imageFile').addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        const preview = document.getElementById('imagePreview');
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('d-none');
+        document.getElementById('imagePlaceholder').classList.add('d-none');
+    });
+</script>
