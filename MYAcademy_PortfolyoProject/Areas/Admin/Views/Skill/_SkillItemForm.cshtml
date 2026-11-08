@@ -1,0 +1,31 @@
+@model SkillItem
+
+<div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-3"></div>
+<input type="hidden" asp-for="SkillItemId" />
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="SkillItemTitle" class="form-label-custom">Yetenek Adı <span class="required-star">*</span></label>
+        <input asp-for="SkillItemTitle" class="form-control-custom" placeholder="Örn: C#" />
+        <span asp-validation-for="SkillItemTitle"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="SkillId" class="form-label-custom">Yetenek Grubu <span class="required-star">*</span></label>
+        <!-- Seçenekler veritabanından SelectList ile gelir -->
+        <select asp-for="SkillId" asp-items="ViewBag.SkillGroups" class="form-control-custom">
+            <option value="0">-- Grup seçiniz --</option>
+        </select>
+        <span asp-validation-for="SkillId"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="Level" class="form-label-custom">
+            Seviye: <strong id="levelValue">%@Model.Level</strong>
+        </label>
+        <input asp-for="Level" type="range" min="0" max="100" step="5" class="form-range"
+               oninput="document.getElementById('levelValue').innerText = '%' + this.value" />
+        <div class="d-flex justify-content-between small text-muted">
+            <span>Başlangıç</span><span>Orta</span><span>İleri</span>
+        </div>
+        <span asp-validation-for="Level"></span>
+    </div>
+</div>

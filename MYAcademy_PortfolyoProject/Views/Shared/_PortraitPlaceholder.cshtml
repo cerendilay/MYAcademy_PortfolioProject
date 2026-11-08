@@ -1,0 +1,15 @@
+@model string?
+@*
+    Admin panelinden fotoğraf yüklenmemişse gösterilen yer tutucu (ad soyadın baş harfleri).
+*@
+@{
+    var initials = string.Concat((Model ?? "")
+        .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        .Take(2)
+        .Select(x => char.ToUpper(x[0])));
+}
+<div class="hero-portrait-img d-flex align-items-center justify-content-center"
+     style="background: var(--accent-sage-soft); color: var(--accent-sage-dark); font-size: 5rem; font-weight: 700; letter-spacing: 2px;"
+     role="img" aria-label="@Model">
+    @(string.IsNullOrEmpty(initials) ? "?" : initials)
+</div>

@@ -1,0 +1,102 @@
+@model MYAcademy_PortfolyoProject.Entities.Contact?
+
+<section id="contact">
+    <div class="container">
+        <div class="row gy-5">
+            <!-- Left Column: Contact Info -->
+            <div class="col-lg-5 reveal-on-scroll">
+                <div class="eyebrow-badge">
+                    <i class="bi bi-envelope-paper-fill"></i> İLETİŞİME GEÇELİM
+                </div>
+                <h2 class="section-title">
+                    @(Model?.Title ?? "Benimle İletişime Geçin")
+                </h2>
+                <p class="text-muted mb-4 fs-6">
+                    @Model?.Description
+                </p>
+
+                @if (Model != null)
+                {
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <a href="mailto:@Model.Email" class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm text-decoration-none text-reset">
+                            <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">E-posta</div>
+                                <div class="fw-semibold">@Model.Email</div>
+                            </div>
+                        </a>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
+                        {
+                            <a href="tel:@Model.PhoneNumber.Replace(" ", "")" class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm text-decoration-none text-reset">
+                                <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                                <div>
+                                    <div class="text-muted small">Telefon</div>
+                                    <div class="fw-semibold">@Model.PhoneNumber</div>
+                                </div>
+                            </a>
+                        }
+
+                        <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                            <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                                <i class="bi bi-geo-alt"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Konum</div>
+                                <div class="fw-semibold">@Model.Location</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- Social links -->
+                <div class="pt-2">
+                    <div class="text-muted small font-heading fw-semibold mb-2">Sosyal Ağlar:</div>
+                    <div class="d-flex gap-2">
+                        @await Component.InvokeAsync("_DefaultSocialMediaComponentPartial", new { variant = "pill" })
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Form -->
+            <div class="col-lg-7 ps-lg-5 reveal-on-scroll">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <form id="contactForm" onsubmit="event.preventDefault(); validateForm();">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="fullName" class="form-label small fw-semibold">Adınız Soyadınız *</label>
+                                <input type="text" class="form-control form-control-custom" id="fullName" placeholder="Örn: Ahmet Yılmaz" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="emailAddr" class="form-label small fw-semibold">E-posta Adresiniz *</label>
+                                <input type="email" class="form-control form-control-custom" id="emailAddr" placeholder="ad@ornek.com" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="subject" class="form-label small fw-semibold">Konu</label>
+                                <input type="text" class="form-control form-control-custom" id="subject" placeholder="Örn: Staj / iş fırsatı veya proje iş birliği">
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label small fw-semibold">Mesajınız *</label>
+                                <textarea class="form-control form-control-custom" id="message" rows="5" placeholder="Projeniz veya sorunuz hakkında detayları paylaşın..." required></textarea>
+                            </div>
+                            <div class="col-12 pt-2">
+                                <button type="submit" class="btn-sage w-100 justify-content-center py-3 fs-6">
+                                    <i class="bi bi-send-fill"></i>
+                                    <span>Mesajımı Gönder</span>
+                                </button>
+                                <div id="formFeedback" class="mt-2 text-center small text-muted"></div>
+                                <div class="text-muted text-center small mt-3" style="font-size: 0.78rem;">
+                                    <i class="bi bi-shield-check me-1"></i> Gönderilen bilgiler gizlilik ilkeleri doğrultusunda korunmaktadır.
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

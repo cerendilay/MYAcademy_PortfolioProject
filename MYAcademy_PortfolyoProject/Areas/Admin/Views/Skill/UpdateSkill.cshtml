@@ -1,0 +1,24 @@
+@model Skill
+@{
+    ViewData["Title"] = "Yetenek Grubunu Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yetenek Grubunu Güncelle</h1>
+            <p class="page-subtitle">@Model.Title</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="UpdateSkill" method="post">
+            <partial name="_SkillForm" model="Model" />
+            <div class="form-actions">
+                <a asp-action="SkillList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary"><i class="bi bi-check-lg"></i> <span>Güncelle</span></button>
+            </div>
+        </form>
+    </div>
+</main>

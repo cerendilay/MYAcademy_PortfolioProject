@@ -1,19 +1,101 @@
-﻿@model List<Contact>
-
+﻿@model Contact
 @{
-    ViewData["Title"] = "ContactList";
+    ViewData["Title"] = "İletişim & Sosyal Medya";
     Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var socialMedias = ViewBag.SocialMedias as List<SocialMedia> ?? new List<SocialMedia>();
 }
-<br /><br />
-<table class="table table-hover">
-    <tr>
-        <th>#</th>
-        <th>Başlık</th>
-        <th>Açıklama</th>
-        <th>Email</th>
-        <th>Telefon</th>
-        <th>Lokasyon</th>
-        <th>Sil</th>
-        <th>Güncelle</th>
-    </tr>
-</table>
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">İletişim & Sosyal Medya</h1>
+            <p class="page-subtitle">Sitedeki iletişim bölümünde ve alt bilgide görünen bilgileri yönetin.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- İletişim bilgileri -->
+        <div class="col-xl-7">
+            <div class="form-card" style="max-width: none;">
+                <h2 class="h6 fw-bold mb-3">İletişim Bilgileri</h2>
+                <form asp-action="ContactList" method="post">
+                    <div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-3"></div>
+                    <input type="hidden" asp-for="ContactId" />
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="Title" class="form-label-custom">Bölüm Başlığı <span class="required-star">*</span></label>
+                            <input asp-for="Title" class="form-control-custom" />
+                            <span asp-validation-for="Title"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+                            <textarea asp-for="Description" class="form-control-custom" rows="3"></textarea>
+                            <span asp-validation-for="Description"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label-custom">E-posta <span class="required-star">*</span></label>
+                            <input asp-for="Email" class="form-control-custom" />
+                            <span asp-validation-for="Email"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Location" class="form-label-custom">Konum <span class="required-star">*</span></label>
+                            <input asp-for="Location" class="form-control-custom" />
+                            <span asp-validation-for="Location"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label-custom">Telefon</label>
+                            <input asp-for="PhoneNumber" class="form-control-custom" placeholder="Boş bırakılırsa sitede gösterilmez" />
+                            <span asp-validation-for="PhoneNumber"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-pastel-primary"><i class="bi bi-check-lg"></i> <span>Kaydet</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sosyal medya -->
+        <div class="col-xl-5">
+            <div class="form-card" style="max-width: none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h6 fw-bold mb-0">Sosyal Medya Bağlantıları</h2>
+                    <a asp-controller="SocialMedia" asp-action="CreateSocialMedia" class="btn-pastel-primary text-decoration-none" style="padding: 6px 12px; font-size: 0.8rem;">
+                        <i class="bi bi-plus-lg"></i> <span>Ekle</span>
+                    </a>
+                </div>
+
+                <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+                    @foreach (var item in socialMedias)
+                    {
+                        <li class="d-flex align-items-center justify-content-between gap-2 p-2 border rounded-3">
+                            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                <span class="exp-icon-bullet flex-shrink-0"><i class="bi @item.Icon"></i></span>
+                                <div class="overflow-hidden">
+                                    <div class="fw-semibold small @(item.IsActive ? "" : "text-muted text-decoration-line-through")">@item.Name</div>
+                                    <a href="@item.Url" target="_blank" rel="noopener" class="small text-muted text-truncate d-block">@item.Url</a>
+                                </div>
+                            </div>
+                            <div class="row-actions-group flex-shrink-0">
+                                <a asp-controller="SocialMedia" asp-action="UpdateSocialMedia" asp-route-id="@item.SocialMediaId" class="btn-action-icon btn-edit" title="Güncelle">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <form asp-controller="SocialMedia" asp-action="DeleteSocialMedia" asp-route-id="@item.SocialMediaId" method="post"
+                                      class="js-confirm-delete d-inline" data-item-name="@item.Name">
+                                    <button type="submit" class="btn-action-icon btn-delete" title="Sil"><i class="bi bi-trash3"></i></button>
+                                </form>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+                @if (!socialMedias.Any())
+                {
+                    <div class="empty-state py-3">Henüz sosyal medya bağlantısı yok.</div>
+                }
+            </div>
+        </div>
+    </div>
+</main>

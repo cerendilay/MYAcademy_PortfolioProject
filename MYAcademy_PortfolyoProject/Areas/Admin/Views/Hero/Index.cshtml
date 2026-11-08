@@ -1,0 +1,93 @@
+@model HeroSection
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var heroTitles = ViewBag.HeroTitles as List<HeroTitle> ?? new List<HeroTitle>();
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Ana Sayfa (Karşılama Alanı)</h1>
+            <p class="page-subtitle">Sitenin en üstünde görünen karşılama metinlerini buradan düzenleyebilirsiniz. Fotoğraf "Hakkımda" sayfasından yönetilir.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Karşılama metinleri -->
+        <div class="col-xl-7">
+            <div class="form-card" style="max-width: none;">
+                <form asp-action="Index" method="post">
+                    <div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-3"></div>
+                    <input type="hidden" asp-for="HeroSectionId" />
+                    <input type="hidden" asp-for="MainImageUrl" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Greeting" class="form-label-custom">Karşılama Metni <span class="required-star">*</span></label>
+                            <input asp-for="Greeting" class="form-control-custom" placeholder="Örn: Merhaba, ben Ceren" />
+                            <span asp-validation-for="Greeting"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Title" class="form-label-custom">Ana Başlık <span class="required-star">*</span></label>
+                            <input asp-for="Title" class="form-control-custom" placeholder="Örn: Bilgisayar Mühendisi" />
+                            <span asp-validation-for="Title"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label-custom">Kısa Tanıtım <span class="required-star">*</span></label>
+                            <textarea asp-for="Description" class="form-control-custom" rows="4"></textarea>
+                            <span asp-validation-for="Description"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-pastel-primary">
+                            <i class="bi bi-check-lg"></i> <span>Kaydet</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Daktilo unvanları -->
+        <div class="col-xl-5">
+            <div class="form-card" style="max-width: none;">
+                <h2 class="h6 fw-bold mb-1">Dönen Unvanlar</h2>
+                <p class="text-muted small mb-3">Ana başlığın altında daktilo efektiyle sırayla yazılır.</p>
+
+                <form asp-action="AddHeroTitle" method="post" class="d-flex gap-2 mb-3">
+                    <input name="title" class="form-control-custom" placeholder="Yeni unvan, ör. Flutter Geliştirici" maxlength="60" required />
+                    <button type="submit" class="btn-pastel-primary text-nowrap"><i class="bi bi-plus-lg"></i> <span>Ekle</span></button>
+                </form>
+
+                <ul class="list-unstyled mb-0 d-flex flex-column gap-2">
+                    @foreach (var item in heroTitles)
+                    {
+                        <li class="d-flex align-items-center justify-content-between gap-2 p-2 border rounded-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="order-badge">@item.Order</span>
+                                <span class="@(item.IsActive ? "" : "text-muted text-decoration-line-through")">@item.Title</span>
+                            </div>
+                            <div class="row-actions-group">
+                                <form asp-action="ToggleHeroTitle" asp-route-id="@item.HeroTitleId" method="post" class="d-inline">
+                                    <button type="submit" class="btn-action-icon btn-view" title="@(item.IsActive ? "Gizle" : "Göster")">
+                                        <i class="bi @(item.IsActive ? "bi-eye" : "bi-eye-slash")"></i>
+                                    </button>
+                                </form>
+                                <form asp-action="DeleteHeroTitle" asp-route-id="@item.HeroTitleId" method="post"
+                                      class="js-confirm-delete d-inline" data-item-name="@item.Title">
+                                    <button type="submit" class="btn-action-icon btn-delete" title="Sil"><i class="bi bi-trash3"></i></button>
+                                </form>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+                @if (!heroTitles.Any())
+                {
+                    <div class="empty-state py-3">Henüz unvan eklenmemiş.</div>
+                }
+            </div>
+        </div>
+    </div>
+</main>

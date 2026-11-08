@@ -34,12 +34,7 @@
                 <!-- Social Links -->
                 <div class="d-flex align-items-center gap-2 pt-2">
                     <span class="text-muted small me-2 font-heading fw-semibold">Takip Et:</span>
-                    <a href="https://github.com/cerendilay" target="_blank" rel="noopener noreferrer" class="social-pill" title="GitHub">
-                        <i class="bi bi-github"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ceren-dilay-velio%C4%9Flu" target="_blank" rel="noopener noreferrer" class="social-pill" title="LinkedIn">
-                        <i class="bi bi-linkedin"></i>
-                    </a>
+                    @await Component.InvokeAsync("_DefaultSocialMediaComponentPartial", new { variant = "pill" })
                 </div>
             </div>
 
@@ -47,7 +42,14 @@
             <div class="col-lg-5 reveal-on-scroll is-revealed">
                 <div class="position-relative mx-auto" style="max-width: 440px;">
                     <div class="hero-portrait-frame">
-                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOoGFL_RUXVi18KeTYZHtpMvWTtuGQlha2lSBEJIb3UBD2AHmHUMcwWkQuBFy2Ih2G3UQdItXjfmoP7gBHBbjDYT0TyYqrhY0j_ZslJZF6gFDTY3UEE3z56G-mss_yPIXrKHzkT6NmYtiU0oNmOWhuVL11uNPnRc-VMnSg-ZRgxS00UWdSipCRY2Dwo_lCXz0hBr0-rvvqSsoFJDYHrmyVLWyIbSRsdGcs24JgjX_388FLX_3wUEy8" alt="Ceren Dilay Velioğlu — Bilgisayar Mühendisi" class="hero-portrait-img">
+                        @if (!string.IsNullOrEmpty(ViewBag.imageUrl as string))
+                        {
+                            <img src="@ViewBag.imageUrl" alt="@ViewBag.fullName — @ViewBag.title" class="hero-portrait-img">
+                        }
+                        else
+                        {
+                            <partial name="_PortraitPlaceholder" model="@(ViewBag.fullName as string)" />
+                        }
                     </div>
 
                     <!-- Floating Experience Badge -->

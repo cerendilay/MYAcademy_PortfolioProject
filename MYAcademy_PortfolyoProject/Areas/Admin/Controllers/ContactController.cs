@@ -4,6 +4,7 @@ using MYAcademy_PortfolyoProject.Entities;
 
 namespace MYAcademy_PortfolyoProject.Areas.Admin.Controllers
 {
+    // İletişim bilgileri tek kayıttır (güncelleme odaklı). Aynı sayfada sosyal medya listesi de gösterilir.
     [Area("Admin")]
     public class ContactController : Controller
     {
@@ -14,23 +15,37 @@ namespace MYAcademy_PortfolyoProject.Areas.Admin.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult ContactList()
         {
-            var values = _context.Contacts.ToList();
-            return View(values);
+            var value = _context.Contacts.FirstOrDefault() ?? new Contact();
+            LoadSocialMedias();
+            return View(value);
         }
 
-        [HttpGet]
-        public IActionResult CreateContact()
-        {
-            return View();
-        }
         [HttpPost]
-        public IActionResult CreateContact(Contact contact)
+        [ValidateAntiForgeryToken]
+        public IActionResult ContactList(Contact contact)
         {
-            _context.Contacts.Add(contact);
+            if (!ModelState.IsValid)
+            {
+                LoadSocialMedias();
+                return View(contact);
+            }
+
+            if (contact.ContactId == 0)
+                _context.Contacts.Add(contact);
+            else
+                _context.Contacts.Update(contact);
+
             _context.SaveChanges();
-            return RedirectToAction("ContactList");
+            TempData["Success"] = "İletişim bilgileri güncellendi.";
+            return RedirectToAction(nameof(ContactList));
+        }
+
+        private void LoadSocialMedias()
+        {
+            ViewBag.SocialMedias = _context.SocialMedias.OrderBy(x => x.DisplayOrder).ToList();
         }
     }
 }

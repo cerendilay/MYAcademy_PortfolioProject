@@ -1,0 +1,24 @@
+@model SkillItem
+@{
+    ViewData["Title"] = "Yeni Yetenek";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yeni Yetenek Ekle</h1>
+            <p class="page-subtitle">Yetenek adı, bağlı olduğu grup ve 0-100 arası seviye bilgisi.</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="CreateSkillItem" method="post">
+            <partial name="_SkillItemForm" model="Model" />
+            <div class="form-actions">
+                <a asp-action="SkillList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary"><i class="bi bi-check-lg"></i> <span>Kaydet</span></button>
+            </div>
+        </form>
+    </div>
+</main>

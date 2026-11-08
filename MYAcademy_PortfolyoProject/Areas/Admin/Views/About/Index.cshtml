@@ -1,0 +1,122 @@
+@model About
+@{
+    ViewData["Title"] = "Hakkımda";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Hakkımda</h1>
+            <p class="page-subtitle">İsim, unvan, tanıtım metni, fotoğraf ve öne çıkan bilgilerinizi buradan güncelleyebilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- Dosya yüklemek için enctype="multipart/form-data" zorunludur -->
+    <form asp-action="Index" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-3"></div>
+        <input type="hidden" asp-for="AboutId" />
+        <input type="hidden" asp-for="ImageUrl" />
+
+        <div class="row g-4">
+            <!-- Fotoğraf -->
+            <div class="col-xl-4">
+                <div class="form-card text-center" style="max-width: none;">
+                    <label class="form-label-custom text-start">Profil Fotoğrafı</label>
+                    <img id="imagePreview" src="@(Model.ImageUrl ?? "")" alt="Profil fotoğrafı önizleme"
+                         class="rounded-3 border w-100 mb-3 @(string.IsNullOrEmpty(Model.ImageUrl) ? "d-none" : "")"
+                         style="aspect-ratio: 4 / 5; object-fit: cover;" />
+                    <div id="imagePlaceholder" class="empty-state border rounded-3 mb-3 @(string.IsNullOrEmpty(Model.ImageUrl) ? "" : "d-none")">
+                        <i class="bi bi-person-bounding-box"></i>
+                        Henüz fotoğraf yüklenmedi
+                    </div>
+
+                    <input type="file" name="imageFile" id="imageFile" class="form-control form-control-sm"
+                           accept=".jpg,.jpeg,.png,.webp" />
+                    <div class="text-start">@Html.ValidationMessage("imageFile")</div>
+                    <small class="text-muted d-block mt-2 text-start">JPG, PNG veya WEBP · en fazla 2 MB · dikey (4:5) fotoğraf önerilir.</small>
+
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="form-check text-start mt-2">
+                            <input class="form-check-input" type="checkbox" name="removeImage" value="true" id="removeImage" />
+                            <label class="form-check-label small" for="removeImage">Mevcut fotoğrafı kaldır</label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Bilgiler -->
+            <div class="col-xl-8">
+                <div class="form-card" style="max-width: none;">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label-custom">Ad Soyad <span class="required-star">*</span></label>
+                            <input asp-for="FullName" class="form-control-custom" />
+                            <span asp-validation-for="FullName"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="JobTitle" class="form-label-custom">Unvan <span class="required-star">*</span></label>
+                            <input asp-for="JobTitle" class="form-control-custom" placeholder="Örn: Bilgisayar Mühendisi" />
+                            <span asp-validation-for="JobTitle"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Location" class="form-label-custom">Konum</label>
+                            <input asp-for="Location" class="form-control-custom" placeholder="Örn: Kırıkkale" />
+                            <span asp-validation-for="Location"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="SectionTitle" class="form-label-custom">Bölüm Başlığı <span class="required-star">*</span></label>
+                            <input asp-for="SectionTitle" class="form-control-custom" />
+                            <span asp-validation-for="SectionTitle"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label-custom">Tanıtım Metni <span class="required-star">*</span></label>
+                            <textarea asp-for="Description" class="form-control-custom" rows="8"></textarea>
+                            <small class="text-muted">Paragrafları ayırmak için araya bir boş satır bırakın.</small>
+                            <span asp-validation-for="Description"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label-custom mb-2">Öne Çıkan Bilgiler</label>
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <input asp-for="Stat1Value" class="form-control-custom mb-1" placeholder="Değer, ör. 4+" />
+                                    <input asp-for="Stat1Label" class="form-control-custom" placeholder="Etiket, ör. Proje" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input asp-for="Stat2Value" class="form-control-custom mb-1" placeholder="Değer" />
+                                    <input asp-for="Stat2Label" class="form-control-custom" placeholder="Etiket" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input asp-for="Stat3Value" class="form-control-custom mb-1" placeholder="Değer" />
+                                    <input asp-for="Stat3Label" class="form-control-custom" placeholder="Etiket" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-pastel-primary">
+                            <i class="bi bi-check-lg"></i> <span>Kaydet</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+
+@section Scripts {
+    <script>
+        // Seçilen fotoğrafı kaydetmeden önce önizle
+        document.getElementById('imageFile').addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+            const preview = document.getElementById('imagePreview');
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('d-none');
+            document.getElementById('imagePlaceholder').classList.add('d-none');
+        });
+    </script>
+}

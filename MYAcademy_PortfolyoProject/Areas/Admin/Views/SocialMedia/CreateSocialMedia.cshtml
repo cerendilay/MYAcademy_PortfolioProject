@@ -1,0 +1,24 @@
+@model SocialMedia
+@{
+    ViewData["Title"] = "Yeni Sosyal Medya";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yeni Sosyal Medya Bağlantısı</h1>
+            <p class="page-subtitle">Eklenen bağlantılar sitenin karşılama, iletişim ve alt bilgi alanlarında gösterilir.</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="CreateSocialMedia" method="post">
+            <partial name="_SocialMediaForm" model="Model" />
+            <div class="form-actions">
+                <a asp-controller="Contact" asp-action="ContactList" class="btn-pastel-secondary text-decoration-none">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary"><i class="bi bi-check-lg"></i> <span>Kaydet</span></button>
+            </div>
+        </form>
+    </div>
+</main>

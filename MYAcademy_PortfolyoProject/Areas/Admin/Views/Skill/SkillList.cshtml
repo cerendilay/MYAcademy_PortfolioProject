@@ -1,0 +1,102 @@
+@model List<Skill>
+@{
+    ViewData["Title"] = "Yeteneklerim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yeteneklerim</h1>
+            <p class="page-subtitle">Yetenekler gruplar halinde sitede gösterilir. Her yeteneğin 0-100 arası bir seviyesi vardır.</p>
+        </div>
+        <div class="header-actions">
+            <a asp-action="CreateSkill" class="btn-pastel-secondary text-decoration-none">
+                <i class="bi bi-folder-plus"></i> <span>Yeni Grup</span>
+            </a>
+            <a asp-action="CreateSkillItem" class="btn-pastel-primary text-decoration-none">
+                <i class="bi bi-plus-circle-fill"></i> <span>Yeni Yetenek</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var group in Model)
+        {
+            <div class="col-xl-6">
+                <div class="data-table-card h-100">
+                    <!-- Grup başlığı -->
+                    <div class="table-filter-bar">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="exp-icon-bullet"><i class="bi @group.IconUrl"></i></div>
+                            <div>
+                                <div class="fw-bold">@group.Title</div>
+                                <small class="text-muted">@group.Description</small>
+                            </div>
+                        </div>
+                        <div class="row-actions-group">
+                            <a asp-action="CreateSkillItem" asp-route-skillId="@group.SkillId" class="btn-action-icon btn-view" title="Bu gruba yetenek ekle">
+                                <i class="bi bi-plus-lg"></i>
+                            </a>
+                            <a asp-action="UpdateSkill" asp-route-id="@group.SkillId" class="btn-action-icon btn-edit" title="Grubu düzenle">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <form asp-action="DeleteSkill" asp-route-id="@group.SkillId" method="post"
+                                  class="js-confirm-delete d-inline" data-item-name="@group.Title grubu ve içindeki @group.SkillItems.Count yetenek">
+                                <button type="submit" class="btn-action-icon btn-delete" title="Grubu sil"><i class="bi bi-trash3"></i></button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Gruptaki yetenekler -->
+                    <div class="table-responsive-wrapper">
+                        <table class="custom-admin-table">
+                            <tbody>
+                                @foreach (var item in group.SkillItems.OrderByDescending(x => x.Level))
+                                {
+                                    <tr>
+                                        <td style="width: 40%;">@item.SkillItemTitle</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress flex-grow-1" style="height: 6px;">
+                                                    <div class="progress-bar" style="width: @item.Level%; background-color: var(--accent-primary);"></div>
+                                                </div>
+                                                <small class="text-muted" style="width: 36px;">%@item.Level</small>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: right; width: 90px;">
+                                            <div class="row-actions-group justify-content-end">
+                                                <a asp-action="UpdateSkillItem" asp-route-id="@item.SkillItemId" class="btn-action-icon btn-edit" title="Güncelle">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <form asp-action="DeleteSkillItem" asp-route-id="@item.SkillItemId" method="post"
+                                                      class="js-confirm-delete d-inline" data-item-name="@item.SkillItemTitle">
+                                                    <button type="submit" class="btn-action-icon btn-delete" title="Sil"><i class="bi bi-trash3"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @if (!group.SkillItems.Any())
+                        {
+                            <div class="empty-state py-4">Bu grupta henüz yetenek yok.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="data-table-card">
+            <div class="empty-state">
+                <i class="bi bi-stars"></i>
+                Henüz yetenek grubu yok. Önce bir grup oluşturun.
+            </div>
+        </div>
+    }
+</main>

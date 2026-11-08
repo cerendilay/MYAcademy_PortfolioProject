@@ -1,11 +1,14 @@
 ﻿@{
     string active = ViewBag.ActiveController ?? "";
+    // Sosyal medya sayfaları "İletişim & Sosyal Medya" menüsünün altında sayılır
+    if (active == "SocialMedia") active = "Contact";
     int unreadCount = ViewBag.UnreadMessageCount ?? 0;
 
     // Menüde gösterilecek linkler: (Controller, Action, İkon, Başlık)
     var menuItems = new[]
     {
         (Controller: "Dashboard",  Action: "Index",          Icon: "bi-grid-1x2",              Text: "Dashboard"),
+        (Controller: "Hero",       Action: "Index",          Icon: "bi-house-heart",           Text: "Ana Sayfa"),
         (Controller: "About",      Action: "Index",          Icon: "bi-person",                Text: "Hakkımda"),
         (Controller: "Skill",      Action: "SkillList",      Icon: "bi-stars",                 Text: "Yeteneklerim"),
         (Controller: "Experience", Action: "ExperienceList", Icon: "bi-journal-bookmark-fill", Text: "Deneyimlerim"),

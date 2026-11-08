@@ -1,0 +1,36 @@
+@model string
+@*
+    Bootstrap Icons sınıfı seçimi için ortak alan.
+    Kullanım: <partial name="_IconPicker" model="Model.IconUrl" view-data='new ViewDataDictionary(ViewData) { ["FieldName"] = "IconUrl" }' />
+*@
+@{
+    string fieldName = ViewData["FieldName"] as string ?? "Icon";
+    var icons = new[]
+    {
+        "bi-server", "bi-database", "bi-code-slash", "bi-phone", "bi-laptop", "bi-cpu", "bi-robot",
+        "bi-diagram-3", "bi-tools", "bi-gear", "bi-cloud", "bi-shield-lock", "bi-brush", "bi-layout-wtf",
+        "bi-github", "bi-linkedin", "bi-twitter-x", "bi-instagram", "bi-youtube", "bi-medium",
+        "bi-globe", "bi-envelope", "bi-stack-overflow", "bi-discord", "bi-facebook"
+    };
+}
+
+<div class="d-flex align-items-center gap-2">
+    <span class="exp-icon-bullet flex-shrink-0" title="Önizleme"><i class="bi @Model" data-icon-preview="@fieldName"></i></span>
+    <input name="@fieldName" id="@fieldName" value="@Model" class="form-control-custom" list="iconOptions-@fieldName"
+           placeholder="ör. bi-github" data-icon-input="@fieldName" />
+</div>
+<datalist id="iconOptions-@fieldName">
+    @foreach (var icon in icons)
+    {
+        <option value="@icon"></option>
+    }
+</datalist>
+<small class="text-muted">Listeden seçin veya <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener">Bootstrap Icons</a> sitesinden bir sınıf adı yazın.</small>
+
+<script>
+    (function () {
+        const input = document.querySelector('[data-icon-input="@fieldName"]');
+        const preview = document.querySelector('[data-icon-preview="@fieldName"]');
+        input.addEventListener('input', () => preview.className = 'bi ' + input.value.trim());
+    })();
+</script>

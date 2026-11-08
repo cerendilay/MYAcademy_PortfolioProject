@@ -18,7 +18,10 @@ namespace MYAcademy_PortfolyoProject.ViewComponents.DefaultViewComponents
             ViewBag.greeting = value?.Greeting;
             ViewBag.title = value?.Title;
             ViewBag.description = value?.Description;
-            ViewBag.mainImageUrl = value?.MainImageUrl;
+            // Fotoğraf ve ad, "Hakkımda" kaydından gelir (tek yerden yönetim).
+            var about = _context.Abouts.FirstOrDefault();
+            ViewBag.imageUrl = about?.ImageUrl;
+            ViewBag.fullName = about?.FullName;
 
             // Daktilo (typewriter) efektinde dönecek unvanlar
             ViewBag.heroTitles = _context.HeroTitles

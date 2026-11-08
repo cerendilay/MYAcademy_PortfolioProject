@@ -657,4 +657,19 @@
             transform: none !important;
         }
     }
+
+    /* Yetenek seviye çubuğu (0-100) */
+    .skill-level-track {
+        height: 6px;
+        border-radius: 999px;
+        background-color: var(--accent-sage-soft);
+        overflow: hidden;
+    }
+
+    .skill-level-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent-sage) 0%, var(--accent-sage-dark) 100%);
+        transition: width 0.8s ease;
+    }
 </style>
