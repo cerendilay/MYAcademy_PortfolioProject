@@ -9,5 +9,7 @@ obj/
 .idea/
 
 # Uploaded files (runtime)
+# Proje görselleri repoya dahil edilir; profil fotoğrafı (uploads/about) dahil edilmez.
 MYAcademy_PortfolioProject/wwwroot/uploads/*
 !MYAcademy_PortfolioProject/wwwroot/uploads/.gitkeep
+!MYAcademy_PortfolioProject/wwwroot/uploads/projects/
