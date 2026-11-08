@@ -9,5 +9,5 @@ obj/
 .idea/
 
 # Uploaded files (runtime)
-MYAcademy_PortfolyoProject/wwwroot/uploads/*
-!MYAcademy_PortfolyoProject/wwwroot/uploads/.gitkeep
+MYAcademy_PortfolioProject/wwwroot/uploads/*
+!MYAcademy_PortfolioProject/wwwroot/uploads/.gitkeep

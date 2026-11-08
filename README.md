@@ -25,17 +25,17 @@ Admin panelinden yönetilen, tamamen dinamik kişisel portfolyo sitesi.
 ```bash
 # 1. Depoyu klonlayın
 git clone <repo-adresi>
-cd MYAcademy_PortfolyoProject
+cd MYAcademy_PortfolioProject
 
 # 2. Bağlantı dizesini kendi SQL Server'ınıza göre düzenleyin
-#    MYAcademy_PortfolyoProject/appsettings.json → ConnectionStrings:DefaultConnection
+#    MYAcademy_PortfolioProject/appsettings.json → ConnectionStrings:DefaultConnection
 
 # 3. Veritabanını oluşturun (dotnet-ef aracı depoda yerel araç olarak tanımlı)
 dotnet tool restore
-dotnet ef database update --project MYAcademy_PortfolyoProject
+dotnet ef database update --project MYAcademy_PortfolioProject
 
 # 4. Çalıştırın
-dotnet run --project MYAcademy_PortfolyoProject
+dotnet run --project MYAcademy_PortfolioProject
 ```
 
 Visual Studio kullanıyorsanız 3. adım yerine *Package Manager Console* üzerinden `Update-Database` komutunu çalıştırabilirsiniz.
@@ -115,13 +115,13 @@ Veritabanı boş oluşur. Önerilen içerik giriş sırası: **Ana Sayfa → Hak
 ## Proje Yapısı
 
 ```
-MYAcademy_PortfolyoProject/
+MYAcademy_PortfolioProject/
 ├── Areas/Admin/
 │   ├── Controllers/        # Admin CRUD controller'ları
 │   ├── Models/             # DashboardViewModel
 │   ├── ViewComponents/     # Admin layout parçaları (sidebar, navbar…)
 │   └── Views/              # Admin sayfaları ve ortak form partial'ları
-├── Context/                # PortfolyoContext (EF Core)
+├── Context/                # PortfolioContext (EF Core)
 ├── Controllers/            # DefaultController (site + iletişim formu)
 ├── Entities/               # Tablolar (Data Annotations ile)
 ├── Migrations/             # Code First migration'ları

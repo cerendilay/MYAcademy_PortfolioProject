@@ -1,0 +1,211 @@
+﻿@using MYAcademy_PortfolioProject.Areas.Admin.Models
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+
+    int readRate = Model.TotalMessageCount == 0
+        ? 0
+        : (Model.TotalMessageCount - Model.UnreadMessageCount) * 100 / Model.TotalMessageCount;
+
+    // İstatistik kartları: (Başlık, Değer, İkon, Renk sınıfı, Link)
+    var cards = new[]
+    {
+        (Label: "Toplam Proje",     Value: Model.TotalProjectCount.ToString(),  Icon: "bi-code-slash",          Color: "icon-green",  Url: Url.Action("ProjectList", "Project")),
+        (Label: "Aktif Proje",      Value: Model.ActiveProjectCount.ToString(), Icon: "bi-eye",                 Color: "icon-blue",   Url: Url.Action("ProjectList", "Project", new { status = "active" })),
+        (Label: "Yetenek",          Value: Model.SkillCount.ToString(),         Icon: "bi-stars",               Color: "icon-purple", Url: Url.Action("SkillList", "Skill")),
+        (Label: "Deneyim",          Value: Model.ExperienceCount.ToString(),    Icon: "bi-briefcase",           Color: "icon-beige",  Url: Url.Action("ExperienceList", "Experience")),
+        (Label: "Eğitim",           Value: Model.EducationCount.ToString(),     Icon: "bi-mortarboard",         Color: "icon-green",  Url: Url.Action("EducationList", "Education")),
+        (Label: "Toplam Mesaj",     Value: Model.TotalMessageCount.ToString(),  Icon: "bi-inbox",               Color: "icon-blue",   Url: Url.Action("MessageList", "Message")),
+        (Label: "Okunmamış Mesaj",  Value: Model.UnreadMessageCount.ToString(), Icon: "bi-envelope-exclamation",Color: "icon-purple", Url: Url.Action("MessageList", "Message", new { filter = "unread" })),
+        (Label: "Okunma Oranı",     Value: "%" + readRate,                       Icon: "bi-envelope-check",      Color: "icon-beige",  Url: Url.Action("MessageList", "Message")),
+    };
+}
+
+<style>
+    a.stat-card { text-decoration: none; color: inherit; transition: transform .15s ease, box-shadow .15s ease; }
+    a.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.05); }
+    .dash-card { background: #fff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.25rem; height: 100%; }
+    .dash-card-title { font-size: .95rem; font-weight: 700; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .dash-card-title a { font-size: .78rem; font-weight: 600; text-decoration: none; color: var(--accent-primary); }
+    .dash-list-item { display: flex; align-items: center; gap: .75rem; padding: .65rem .5rem; border-radius: 10px; text-decoration: none; color: inherit; }
+    .dash-list-item:hover { background: #F8F7F3; }
+    .dash-list-item.unread .dash-item-title { font-weight: 700; }
+    .quick-action { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; padding: 1rem .5rem;
+                    border: 1px dashed var(--border-color); border-radius: 12px; text-decoration: none; color: var(--text-primary);
+                    font-size: .8rem; font-weight: 600; text-align: center; transition: all .15s ease; height: 100%; }
+    .quick-action i { font-size: 1.35rem; color: var(--accent-primary); }
+    .quick-action:hover { border-style: solid; border-color: var(--accent-primary); background: #F4F8F5; }
+</style>
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Hoş geldin, Ceren 👋</h1>
+            <p class="page-subtitle">Portfolyo sitenin güncel özeti. Kartlara tıklayarak ilgili sayfaya gidebilirsin.</p>
+        </div>
+    </div>
+
+    <!-- 1. İstatistik kartları -->
+    <div class="stats-row">
+        @foreach (var card in cards)
+        {
+            <a href="@card.Url" class="stat-card">
+                <div class="stat-icon-wrapper @card.Color"><i class="bi @card.Icon"></i></div>
+                <div class="stat-content">
+                    <span class="stat-label">@card.Label</span>
+                    <h3 class="stat-value">@card.Value</h3>
+                </div>
+            </a>
+        }
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- 2. Son 5 mesaj -->
+        <div class="col-xl-7">
+            <div class="dash-card">
+                <div class="dash-card-title">
+                    <span><i class="bi bi-inbox me-2"></i>Son Mesajlar</span>
+                    <a asp-controller="Message" asp-action="MessageList">Tümünü gör <i class="bi bi-arrow-right"></i></a>
+                </div>
+
+                @foreach (var message in Model.LastMessages)
+                {
+                    <!-- Tıklanınca gelen kutusunda ilgili mesajın modalı açılır -->
+                    <a asp-controller="Message" asp-action="MessageList" asp-route-open="@message.MessageId"
+                       class="dash-list-item @(message.IsRead ? "" : "unread")">
+                        <div class="user-avatar-circle flex-shrink-0">@message.SenderName.Trim().Substring(0, 1).ToUpper()</div>
+                        <div class="flex-grow-1 overflow-hidden">
+                            <div class="d-flex justify-content-between gap-2">
+                                <span class="dash-item-title text-truncate">@message.SenderName</span>
+                                <small class="text-muted text-nowrap">@message.SendDate.ToString("dd MMM, HH:mm")</small>
+                            </div>
+                            <div class="small text-muted text-truncate">@message.Subject</div>
+                        </div>
+                        <span class="status-pill flex-shrink-0 @(message.IsRead ? "status-passive" : "status-active")">@(message.IsRead ? "Okundu" : "Yeni")</span>
+                    </a>
+                }
+
+                @if (!Model.LastMessages.Any())
+                {
+                    <div class="empty-state py-4"><i class="bi bi-inbox"></i>Henüz mesaj yok.</div>
+                }
+            </div>
+        </div>
+
+        <!-- 3. Kategori özeti (GroupBy) -->
+        <div class="col-xl-5">
+            <div class="dash-card">
+                <div class="dash-card-title">
+                    <span><i class="bi bi-pie-chart me-2"></i>Kategorilere Göre Projeler</span>
+                    <a asp-controller="Category" asp-action="CategoryList">Kategoriler <i class="bi bi-arrow-right"></i></a>
+                </div>
+
+                @if (Model.CategorySummaries.Any())
+                {
+                    <div style="height: 190px;" class="mb-3"><canvas id="categoryChart" aria-label="Kategorilere göre proje sayısı grafiği" role="img"></canvas></div>
+                    <table class="table table-sm align-middle mb-0 small">
+                        <thead><tr><th>Kategori</th><th class="text-center">Proje</th><th class="text-center">Aktif</th></tr></thead>
+                        <tbody>
+                            @foreach (var item in Model.CategorySummaries)
+                            {
+                                <tr>
+                                    <td>@item.CategoryName</td>
+                                    <td class="text-center fw-semibold">@item.ProjectCount</td>
+                                    <td class="text-center text-muted">@item.ActiveProjectCount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty-state py-4"><i class="bi bi-pie-chart"></i>Henüz proje yok.</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- 4. Son eklenen 3 proje -->
+        <div class="col-xl-7">
+            <div class="dash-card">
+                <div class="dash-card-title">
+                    <span><i class="bi bi-code-slash me-2"></i>Son Eklenen Projeler</span>
+                    <a asp-controller="Project" asp-action="ProjectList" asp-route-sort="recentlyAdded">Tümünü gör <i class="bi bi-arrow-right"></i></a>
+                </div>
+
+                @foreach (var project in Model.LastProjects)
+                {
+                    <a asp-controller="Project" asp-action="UpdateProject" asp-route-id="@project.ProjectId" class="dash-list-item">
+                        @if (!string.IsNullOrEmpty(project.ImageUrl))
+                        {
+                            <img src="@project.ImageUrl" alt="" class="rounded-2 border flex-shrink-0" style="width: 56px; height: 40px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <div class="exp-icon-bullet flex-shrink-0"><i class="bi bi-code-square"></i></div>
+                        }
+                        <div class="flex-grow-1 overflow-hidden">
+                            <div class="dash-item-title fw-semibold text-truncate">@project.ProjectTitle</div>
+                            <div class="small text-muted">@project.Category?.CategoryName</div>
+                        </div>
+                        <span class="status-pill flex-shrink-0 @(project.IsActive ? "status-active" : "status-passive")">@(project.IsActive ? "Aktif" : "Pasif")</span>
+                    </a>
+                }
+
+                @if (!Model.LastProjects.Any())
+                {
+                    <div class="empty-state py-4"><i class="bi bi-folder2-open"></i>Henüz proje eklenmemiş.</div>
+                }
+            </div>
+        </div>
+
+        <!-- 5. Hızlı erişim -->
+        <div class="col-xl-5">
+            <div class="dash-card">
+                <div class="dash-card-title"><span><i class="bi bi-lightning-charge me-2"></i>Hızlı Erişim</span></div>
+                <div class="row g-2">
+                    <div class="col-6"><a asp-controller="Project" asp-action="CreateProject" class="quick-action"><i class="bi bi-plus-square"></i>Yeni Proje Ekle</a></div>
+                    <div class="col-6"><a asp-controller="Message" asp-action="MessageList" asp-route-filter="unread" class="quick-action"><i class="bi bi-envelope-open"></i>Mesajları Gör</a></div>
+                    <div class="col-6"><a asp-controller="Skill" asp-action="CreateSkillItem" class="quick-action"><i class="bi bi-stars"></i>Yetenek Ekle</a></div>
+                    <div class="col-6"><a asp-controller="About" asp-action="Index" class="quick-action"><i class="bi bi-person-badge"></i>Hakkımda'yı Düzenle</a></div>
+                    <div class="col-12"><a asp-area="" asp-controller="Default" asp-action="Index" target="_blank" class="quick-action"><i class="bi bi-box-arrow-up-right"></i>Siteyi Önizle</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @if (Model.CategorySummaries.Any())
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script>
+            // Kategori özeti grafiği (Chart.js) — veriler GroupBy sonucundan gelir
+            const categoryData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                Model.CategorySummaries.Select(x => new { name = x.CategoryName, count = x.ProjectCount })));
+
+            new Chart(document.getElementById('categoryChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: categoryData.map(x => x.name),
+                    datasets: [{
+                        data: categoryData.map(x => x.count),
+                        backgroundColor: ['#9BB7A2', '#C58D79', '#A8B8CC', '#D6C3A5', '#B9A6C9', '#8FA9A0'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    cutout: '62%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} proje` } }
+                    }
+                }
+            });
+        </script>
+    }
+}
