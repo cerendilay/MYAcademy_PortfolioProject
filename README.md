@@ -131,13 +131,24 @@ Veritabanı boş oluşur. Önerilen içerik giriş sırası: **Ana Sayfa → Hak
 
 ## Özgün Katkılar
 
-> *Bu bölümü kendi cümlelerinizle güncelleyin — sunumda neyi neden yaptığınızı anlatacaksınız.*
+Case'te istenenlerin dışında, siteyi gerçekten kullanacak biri olarak "bu olsa işimi kolaylaştırırdı" dediğim noktalara odaklandım:
 
-1. **Tek tıkla Aktif/Pasif:** Deneyim ve proje listelerinde durum rozetine tıklamak kaydı sitede gösterir/gizler; düzenleme sayfasına girmeye gerek kalmaz.
-2. **Dashboard'dan mesaja doğrudan erişim:** Son mesajlardan birine tıklanınca gelen kutusu açılır ve o mesajın modalı otomatik açılır; sidebar'daki okunmamış sayısı sayfa yenilenmeden güncellenir.
-3. **İletişim formu güvenliği:** Antiforgery token, `[Bind]` ile overposting koruması (dışarıdan `IsRead`/`SendDate` gönderilemez) ve görünmez "bal küpü" alanıyla basit bot koruması.
-4. **Veri bütünlüğü:** İçinde proje olan kategori silinemez (aksi halde cascade delete projeleri de silerdi); kullanıcı uyarılır.
-5. **Fotoğraf yoksa yer tutucu:** Hakkımda fotoğrafı yüklenmemişse şablon görseli yerine isimden üretilen baş harfler gösterilir.
+**1. CV'mden beslenen gerçek bir portfolyo**
+Şablondaki örnek içerikleri tek tek kendi bilgilerimle değiştirdim: deneyimlerim, eğitimim, 33 yeteneğim ve projelerim veritabanından geliyor. "Özgeçmişimi İncele" butonu CV'min PDF hâlini açıyor. Böylece proje bir ödev olmaktan çıkıp doğrudan kullanabileceğim kişisel siteme dönüştü.
+
+**2. Yöneticinin zamanını kısaltan küçük dokunuşlar**
+- Deneyim ve proje listelerinde durum rozetine tek tıkla kaydı sitede gösterip gizleyebiliyorum; düzenleme sayfasına girmeye gerek kalmıyor.
+- Dashboard'daki son mesajlardan birine tıklayınca gelen kutusu açılıyor ve o mesajın detayı doğrudan modalda geliyor. Mesajı açtığımda "okundu" oluyor ve menüdeki okunmamış sayısı sayfa yenilenmeden azalıyor.
+- Dashboard'daki kartlar ilgili sayfaya filtreli olarak gidiyor (ör. "Okunmamış Mesaj" kartı gelen kutusunu okunmamışlar filtresiyle açıyor).
+
+**3. Formu dışarıya açarken güvenliği düşünmek**
+İletişim formu herkese açık olduğu için üç önlem ekledim: antiforgery token, `[Bind]` ile yalnızca formdaki alanların alınması (dışarıdan "okundu" bilgisi gönderilemiyor) ve botların doldurduğu görünmez bir "bal küpü" alanı. Görsel yüklemede de sadece uzantıya güvenmeyip dosyanın ilk baytlarını kontrol ediyorum.
+
+**4. Veri kaybını önlemek**
+İçinde proje bulunan bir kategoriyi silmeye çalışınca işlem engelleniyor ve uyarı veriliyor. EF Core'un varsayılan davranışı (cascade delete) projeleri de sessizce silecekti; bunu fark edip önlemek benim için bu projenin en öğretici anlarından biriydi.
+
+**5. Boş kalmayan bir arayüz**
+Fotoğraf yüklenmemişse şablondaki başkasına ait görsel yerine adımın baş harfleri, proje görseli yoksa sade bir yer tutucu gösteriliyor. Listeler boşken "henüz kayıt yok" mesajları çıkıyor; hiçbir sayfa boş ya da kırık görünmüyor.
 
 ---
 
