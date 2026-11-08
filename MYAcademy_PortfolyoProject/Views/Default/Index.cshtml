@@ -206,26 +206,7 @@
 
     revealElements.forEach(el => observer.observe(el));
 
-    // 8. Contact Form Client-side Validation (ready for ASP.NET Core)
-    function validateForm() {
-      const name = document.getElementById("fullName").value.trim();
-      const email = document.getElementById("emailAddr").value.trim();
-      const message = document.getElementById("message").value.trim();
-      const feedback = document.getElementById("formFeedback");
-
-      if (!name || !email || !message) {
-        feedback.innerHTML = '<span class="text-danger">Lütfen tüm zorunlu alanları doldurun.</span>';
-        return;
-      }
-
-      const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
-      if (!emailRegex.test(email)) {
-        feedback.innerHTML = '<span class="text-danger">Geçerli bir e-posta adresi giriniz.</span>';
-        return;
-      }
-
-      feedback.innerHTML = '<span class="text-success"><i class="bi bi-check-circle me-1"></i> Form doğrulandı. (ASP.NET Core Controller entegrasyonu için hazırdır)</span>';
-    }
+    // 8. İletişim formu gönderimi _DefaultContactComponentPartial içinde yapılıyor.
   </script>
 </body>
 </html>

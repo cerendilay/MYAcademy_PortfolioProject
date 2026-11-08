@@ -43,9 +43,10 @@
                        class="sidebar-link @(active == item.Controller ? "active" : "")">
                         <i class="bi @item.Icon"></i>
                         <span>@item.Text</span>
-                        @if (item.Controller == "Message" && unreadCount > 0)
+                        @if (item.Controller == "Message")
                         {
-                            <span class="badge-count" title="Okunmamış mesaj">@unreadCount</span>
+                            <!-- Mesaj okununca JavaScript ile anlık güncellenir -->
+                            <span class="badge-count @(unreadCount == 0 ? "d-none" : "")" id="unreadBadge" title="Okunmamış mesaj">@unreadCount</span>
                         }
                     </a>
                 </li>

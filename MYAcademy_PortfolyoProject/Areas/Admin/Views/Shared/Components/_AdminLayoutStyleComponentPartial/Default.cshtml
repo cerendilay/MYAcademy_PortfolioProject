@@ -250,6 +250,7 @@
     .admin-main {
         margin-left: var(--sidebar-width);
         flex-grow: 1;
+        min-width: 0; /* geniş tablolar sayfayı taşırmasın, kendi içinde kaysın */
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -1174,6 +1175,17 @@
     .input-validation-error {
         border-color: var(--state-danger-text) !important;
         background-color: #FFF8F7 !important;
+    }
+
+    /* 3 kartlık istatistik satırı (dar ekranlarda alt alta) */
+    .stats-row.stats-row-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @@media (max-width: 767.98px) {
+        .stats-row.stats-row-3 {
+            grid-template-columns: 1fr;
+        }
     }
 
     /* Boş liste durumu */

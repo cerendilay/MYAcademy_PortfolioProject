@@ -65,30 +65,39 @@
             <!-- Right Column: Form -->
             <div class="col-lg-7 ps-lg-5 reveal-on-scroll">
                 <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
-                    <form id="contactForm" onsubmit="event.preventDefault(); validateForm();">
+                    <!-- Form sayfa yenilenmeden (fetch) DefaultController.SendMessage'a gönderilir -->
+                    <form id="contactForm" action="/Default/SendMessage" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <!-- Bot koruması: gerçek kullanıcılar bu alanı görmez -->
+                        <input type="text" name="website" tabindex="-1" autocomplete="off" class="d-none" aria-hidden="true" />
+
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="fullName" class="form-label small fw-semibold">Adınız Soyadınız *</label>
-                                <input type="text" class="form-control form-control-custom" id="fullName" placeholder="Örn: Ahmet Yılmaz" required>
+                                <label for="SenderName" class="form-label small fw-semibold">Adınız Soyadınız *</label>
+                                <input type="text" class="form-control form-control-custom" id="SenderName" name="SenderName" maxlength="100" placeholder="Örn: Ahmet Yılmaz" required>
+                                <div class="invalid-feedback" data-error-for="SenderName"></div>
                             </div>
                             <div class="col-md-6">
-                                <label for="emailAddr" class="form-label small fw-semibold">E-posta Adresiniz *</label>
-                                <input type="email" class="form-control form-control-custom" id="emailAddr" placeholder="ad@ornek.com" required>
+                                <label for="SenderEmail" class="form-label small fw-semibold">E-posta Adresiniz *</label>
+                                <input type="email" class="form-control form-control-custom" id="SenderEmail" name="SenderEmail" maxlength="150" placeholder="ad@ornek.com" required>
+                                <div class="invalid-feedback" data-error-for="SenderEmail"></div>
                             </div>
                             <div class="col-12">
-                                <label for="subject" class="form-label small fw-semibold">Konu</label>
-                                <input type="text" class="form-control form-control-custom" id="subject" placeholder="Örn: Staj / iş fırsatı veya proje iş birliği">
+                                <label for="Subject" class="form-label small fw-semibold">Konu *</label>
+                                <input type="text" class="form-control form-control-custom" id="Subject" name="Subject" maxlength="150" placeholder="Örn: Staj / iş fırsatı veya proje iş birliği" required>
+                                <div class="invalid-feedback" data-error-for="Subject"></div>
                             </div>
                             <div class="col-12">
-                                <label for="message" class="form-label small fw-semibold">Mesajınız *</label>
-                                <textarea class="form-control form-control-custom" id="message" rows="5" placeholder="Projeniz veya sorunuz hakkında detayları paylaşın..." required></textarea>
+                                <label for="MessageDetail" class="form-label small fw-semibold">Mesajınız *</label>
+                                <textarea class="form-control form-control-custom" id="MessageDetail" name="MessageDetail" rows="5" maxlength="2000" placeholder="Projeniz veya sorunuz hakkında detayları paylaşın..." required></textarea>
+                                <div class="invalid-feedback" data-error-for="MessageDetail"></div>
                             </div>
                             <div class="col-12 pt-2">
-                                <button type="submit" class="btn-sage w-100 justify-content-center py-3 fs-6">
+                                <button type="submit" class="btn-sage w-100 justify-content-center py-3 fs-6" id="contactSubmitBtn">
                                     <i class="bi bi-send-fill"></i>
                                     <span>Mesajımı Gönder</span>
                                 </button>
-                                <div id="formFeedback" class="mt-2 text-center small text-muted"></div>
+                                <div id="formFeedback" class="mt-2 text-center small" role="status" aria-live="polite"></div>
                                 <div class="text-muted text-center small mt-3" style="font-size: 0.78rem;">
                                     <i class="bi bi-shield-check me-1"></i> Gönderilen bilgiler gizlilik ilkeleri doğrultusunda korunmaktadır.
                                 </div>
@@ -100,3 +109,72 @@
         </div>
     </div>
 </section>
+
+<script>
+    // İletişim formu: istemci tarafında hızlı kontrol + sunucuya fetch ile gönderim.
+    // Sunucu (ModelState) hata dönerse, mesajlar ilgili alanın altında gösterilir.
+    (function () {
+        const form = document.getElementById('contactForm');
+        if (!form) return;
+        const feedback = document.getElementById('formFeedback');
+        const submitBtn = document.getElementById('contactSubmitBtn');
+
+        function clearErrors() {
+            form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            form.querySelectorAll('[data-error-for]').forEach(el => el.textContent = '');
+        }
+
+        function showErrors(errors) {
+            Object.entries(errors).forEach(([field, text]) => {
+                const input = form.querySelector(`[name="${field}"]`);
+                const box = form.querySelector(`[data-error-for="${field}"]`);
+                if (input) input.classList.add('is-invalid');
+                if (box) box.textContent = text;
+            });
+        }
+
+        function clientValidate() {
+            const errors = {};
+            const value = name => form.elements[name].value.trim();
+            if (value('SenderName').length < 2) errors.SenderName = 'Lütfen adınızı ve soyadınızı yazın.';
+            if (!value('SenderEmail')) errors.SenderEmail = 'Lütfen e-posta adresinizi yazın.';
+            else if (!/^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/.test(value('SenderEmail'))) errors.SenderEmail = 'Geçerli bir e-posta adresi giriniz.';
+            if (value('Subject').length < 3) errors.Subject = 'Lütfen mesajınızın konusunu yazın.';
+            if (value('MessageDetail').length < 10) errors.MessageDetail = 'Mesajınız en az 10 karakter olmalıdır.';
+            return errors;
+        }
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            clearErrors();
+            feedback.innerHTML = '';
+
+            const errors = clientValidate();
+            if (Object.keys(errors).length) {
+                showErrors(errors);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.querySelector('span').textContent = 'Gönderiliyor...';
+
+            try {
+                const response = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+                const result = await response.json();
+
+                if (result.success) {
+                    form.reset();
+                    feedback.innerHTML = `<span class="text-success"><i class="bi bi-check-circle me-1"></i>${result.message}</span>`;
+                } else {
+                    showErrors(result.errors || {});
+                    feedback.innerHTML = '<span class="text-danger">Lütfen işaretli alanları kontrol edin.</span>';
+                }
+            } catch {
+                feedback.innerHTML = '<span class="text-danger">Mesaj gönderilemedi. Lütfen daha sonra tekrar deneyin.</span>';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.querySelector('span').textContent = 'Mesajımı Gönder';
+            }
+        });
+    })();
+</script>
