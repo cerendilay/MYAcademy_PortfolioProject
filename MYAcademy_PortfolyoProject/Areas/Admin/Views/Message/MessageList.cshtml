@@ -257,6 +257,12 @@
                     openMessage(row.dataset.id);
                 });
             });
+
+            // Dashboard'dan ?open=5 ile gelindiyse ilgili mesajın modalını doğrudan aç
+            const openId = new URLSearchParams(location.search).get('open');
+            if (openId && /^\d+$/.test(openId)) {
+                openMessage(openId);
+            }
         })();
     </script>
 }

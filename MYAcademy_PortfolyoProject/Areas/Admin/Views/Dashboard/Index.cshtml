@@ -1,298 +1,211 @@
-﻿@{
+﻿@using MYAcademy_PortfolyoProject.Areas.Admin.Models
+@model DashboardViewModel
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
 
-    // Dinamik veriler (controller'dan)
-    int total = ViewBag.v1;
-    int unread = ViewBag.v2;
-    int read = ViewBag.v3;
-    int rate = total == 0 ? 0 : read * 100 / total;
+    int readRate = Model.TotalMessageCount == 0
+        ? 0
+        : (Model.TotalMessageCount - Model.UnreadMessageCount) * 100 / Model.TotalMessageCount;
 
-    // Statik (UI) veriler
-    var labels = new[] { "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz" };
-    var counts = new[] { 4, 7, 3, 9, 6, 2, 5 };
-    int max = counts.Max();
-    var last = new[] {
-        (Name: "Ayşe Yılmaz",  Subject: "Proje teklifi",      Text: "Merhaba, web siteniz için bir teklif almak istiyorum.", Date: "03 Kas, 14:20", IsRead: false),
-        (Name: "Mehmet Kaya",  Subject: "İş birliği",         Text: "Portfolyonuzu inceledim, birlikte çalışmak isteriz.",   Date: "02 Kas, 10:05", IsRead: false),
-        (Name: "Zeynep Demir", Subject: "Teşekkürler",        Text: "Geçen haftaki görüşme için teşekkür ederim.",            Date: "01 Kas, 18:42", IsRead: true),
-        (Name: "Can Öztürk",   Subject: "Staj başvurusu",     Text: "Ekibinizde staj imkânı olup olmadığını öğrenmek isterim.", Date: "31 Eki, 09:15", IsRead: true)
+    // İstatistik kartları: (Başlık, Değer, İkon, Renk sınıfı, Link)
+    var cards = new[]
+    {
+        (Label: "Toplam Proje",     Value: Model.TotalProjectCount.ToString(),  Icon: "bi-code-slash",          Color: "icon-green",  Url: Url.Action("ProjectList", "Project")),
+        (Label: "Aktif Proje",      Value: Model.ActiveProjectCount.ToString(), Icon: "bi-eye",                 Color: "icon-blue",   Url: Url.Action("ProjectList", "Project", new { status = "active" })),
+        (Label: "Yetenek",          Value: Model.SkillCount.ToString(),         Icon: "bi-stars",               Color: "icon-purple", Url: Url.Action("SkillList", "Skill")),
+        (Label: "Deneyim",          Value: Model.ExperienceCount.ToString(),    Icon: "bi-briefcase",           Color: "icon-beige",  Url: Url.Action("ExperienceList", "Experience")),
+        (Label: "Eğitim",           Value: Model.EducationCount.ToString(),     Icon: "bi-mortarboard",         Color: "icon-green",  Url: Url.Action("EducationList", "Education")),
+        (Label: "Toplam Mesaj",     Value: Model.TotalMessageCount.ToString(),  Icon: "bi-inbox",               Color: "icon-blue",   Url: Url.Action("MessageList", "Message")),
+        (Label: "Okunmamış Mesaj",  Value: Model.UnreadMessageCount.ToString(), Icon: "bi-envelope-exclamation",Color: "icon-purple", Url: Url.Action("MessageList", "Message", new { filter = "unread" })),
+        (Label: "Okunma Oranı",     Value: "%" + readRate,                       Icon: "bi-envelope-check",      Color: "icon-beige",  Url: Url.Action("MessageList", "Message")),
     };
 }
 
 <style>
-    .db {
-        --g: #2f5d4e;
-        --g-soft: #e7efe9;
-        --line: #ebe8e1;
-        --muted: #8a8a85;
-    }
-
-    .db-card {
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 1.4rem;
-        height: 100%;
-    }
-
-    .db-title {
-        font-weight: 600;
-        margin-bottom: 1.2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-        .db-title small {
-            color: var(--muted);
-            font-weight: 400;
-        }
-
-    .stat {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .stat-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        display: grid;
-        place-items: center;
-        font-size: 1.4rem;
-    }
-
-    .stat-val {
-        font-size: 1.8rem;
-        font-weight: 700;
-        line-height: 1;
-    }
-
-    .stat-lbl {
-        color: var(--muted);
-        font-size: .85rem;
-        margin-top: .3rem;
-    }
-
-    .c-green {
-        background: var(--g-soft);
-        color: var(--g);
-    }
-
-    .c-blue {
-        background: #e6eef8;
-        color: #3b6ea5;
-    }
-
-    .c-rose {
-        background: #f9e7e7;
-        color: #b44b4b;
-    }
-
-    .bars {
-        display: flex;
-        align-items: flex-end;
-        gap: .8rem;
-        height: 190px;
-    }
-
-    .bar {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-        height: 100%;
-        gap: .4rem;
-    }
-
-    .bar-fill {
-        width: 100%;
-        max-width: 42px;
-        background: var(--g);
-        border-radius: 8px 8px 4px 4px;
-        opacity: .85;
-        transition: opacity .2s;
-    }
-
-    .bar:hover .bar-fill {
-        opacity: 1;
-    }
-
-    .bar span {
-        font-size: .75rem;
-        color: var(--muted);
-    }
-
-    .bar b {
-        font-size: .8rem;
-    }
-
-    .donut {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        margin: .5rem auto 1.2rem;
-        display: grid;
-        place-items: center;
-        background: conic-gradient(var(--g) calc(var(--p) * 1%), var(--g-soft) 0);
-    }
-
-        .donut div {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-
-    .legend {
-        display: flex;
-        justify-content: center;
-        gap: 1.2rem;
-        font-size: .85rem;
-        color: var(--muted);
-    }
-
-        .legend i {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 3px;
-            margin-right: .35rem;
-        }
-
-    .msg-row {
-        display: flex;
-        align-items: center;
-        gap: .9rem;
-        padding: .8rem 0;
-        border-bottom: 1px solid var(--line);
-    }
-
-        .msg-row:last-child {
-            border-bottom: none;
-        }
-
-    .avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: var(--g-soft);
-        color: var(--g);
-        display: grid;
-        place-items: center;
-        font-weight: 600;
-        flex-shrink: 0;
-    }
-
-    .msg-body {
-        flex: 1;
-        min-width: 0;
-    }
-
-        .msg-body p {
-            margin: 0;
-            color: var(--muted);
-            font-size: .85rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-    .badge-soft {
-        font-size: .72rem;
-        padding: .3rem .6rem;
-        border-radius: 20px;
-    }
+    a.stat-card { text-decoration: none; color: inherit; transition: transform .15s ease, box-shadow .15s ease; }
+    a.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.05); }
+    .dash-card { background: #fff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.25rem; height: 100%; }
+    .dash-card-title { font-size: .95rem; font-weight: 700; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .dash-card-title a { font-size: .78rem; font-weight: 600; text-decoration: none; color: var(--accent-primary); }
+    .dash-list-item { display: flex; align-items: center; gap: .75rem; padding: .65rem .5rem; border-radius: 10px; text-decoration: none; color: inherit; }
+    .dash-list-item:hover { background: #F8F7F3; }
+    .dash-list-item.unread .dash-item-title { font-weight: 700; }
+    .quick-action { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; padding: 1rem .5rem;
+                    border: 1px dashed var(--border-color); border-radius: 12px; text-decoration: none; color: var(--text-primary);
+                    font-size: .8rem; font-weight: 600; text-align: center; transition: all .15s ease; height: 100%; }
+    .quick-action i { font-size: 1.35rem; color: var(--accent-primary); }
+    .quick-action:hover { border-style: solid; border-color: var(--accent-primary); background: #F4F8F5; }
 </style>
 
-<div class="db container-fluid py-3">
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Hoş geldin, Ceren 👋</h1>
+            <p class="page-subtitle">Portfolyo sitenin güncel özeti. Kartlara tıklayarak ilgili sayfaya gidebilirsin.</p>
+        </div>
+    </div>
 
-    <!-- Dinamik istatistik kartları -->
-    <div class="row g-4 mb-4">
-        @{
-            var stats = new[] {
-                (Val: total,  Lbl: "Toplam Mesaj", Icon: "bi-envelope",             Cls: "c-green"),
-                (Val: unread, Lbl: "Okunmamış",    Icon: "bi-envelope-exclamation", Cls: "c-rose"),
-                (Val: read,   Lbl: "Okunmuş",      Icon: "bi-envelope-check",       Cls: "c-blue")
-            };
-        }
-        @foreach (var s in stats)
+    <!-- 1. İstatistik kartları -->
+    <div class="stats-row">
+        @foreach (var card in cards)
         {
-            <div class="col-md-4">
-                <div class="db-card stat">
-                    <div class="stat-icon @s.Cls"><i class="bi @s.Icon"></i></div>
-                    <div>
-                        <div class="stat-val">@s.Val</div>
-                        <div class="stat-lbl">@s.Lbl</div>
-                    </div>
+            <a href="@card.Url" class="stat-card">
+                <div class="stat-icon-wrapper @card.Color"><i class="bi @card.Icon"></i></div>
+                <div class="stat-content">
+                    <span class="stat-label">@card.Label</span>
+                    <h3 class="stat-value">@card.Value</h3>
                 </div>
-            </div>
+            </a>
         }
     </div>
 
     <div class="row g-4 mb-4">
-        <!-- Haftalık grafik (statik) -->
-        <div class="col-xl-8">
-            <div class="db-card">
-                <div class="db-title">Son 7 Gün <small>Günlük gelen mesajlar</small></div>
-                <div class="bars">
-                    @for (int i = 0; i < 7; i++)
-                    {
-                        <div class="bar">
-                            <b>@counts[i]</b>
-                            <div class="bar-fill" style="height:@(counts[i] * 100 / max)%"></div>
-                            <span>@labels[i]</span>
-                        </div>
-                    }
+        <!-- 2. Son 5 mesaj -->
+        <div class="col-xl-7">
+            <div class="dash-card">
+                <div class="dash-card-title">
+                    <span><i class="bi bi-inbox me-2"></i>Son Mesajlar</span>
+                    <a asp-controller="Message" asp-action="MessageList">Tümünü gör <i class="bi bi-arrow-right"></i></a>
                 </div>
-            </div>
-        </div>
 
-        <!-- Okunma oranı (v1 ve v3'ten hesaplanır) -->
-        <div class="col-xl-4">
-            <div class="db-card">
-                <div class="db-title">Okunma Oranı</div>
-                <div class="donut" style="--p:@rate"><div>%@rate</div></div>
-                <div class="legend">
-                    <span><i style="background:var(--g)"></i>Okundu (@read)</span>
-                    <span><i style="background:var(--g-soft)"></i>Okunmadı (@unread)</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Son mesajlar (statik) -->
-    <div class="db-card">
-        <div class="db-title">
-            Son Mesajlar
-            <a asp-area="Admin" asp-controller="Message" asp-action="MessageList" class="small text-decoration-none" style="color:var(--g)">Tümünü gör →</a>
-        </div>
-
-        @foreach (var m in last)
-        {
-            <div class="msg-row">
-                <div class="avatar">@m.Name.Substring(0, 1)</div>
-                <div class="msg-body">
-                    <strong>@m.Name</strong> · <span class="small">@m.Subject</span>
-                    <p>@m.Text</p>
-                </div>
-                <small class="text-muted d-none d-md-block">@m.Date</small>
-                @if (m.IsRead)
+                @foreach (var message in Model.LastMessages)
                 {
-                    <span class="badge-soft c-blue">Okundu</span>
+                    <!-- Tıklanınca gelen kutusunda ilgili mesajın modalı açılır -->
+                    <a asp-controller="Message" asp-action="MessageList" asp-route-open="@message.MessageId"
+                       class="dash-list-item @(message.IsRead ? "" : "unread")">
+                        <div class="user-avatar-circle flex-shrink-0">@message.SenderName.Trim().Substring(0, 1).ToUpper()</div>
+                        <div class="flex-grow-1 overflow-hidden">
+                            <div class="d-flex justify-content-between gap-2">
+                                <span class="dash-item-title text-truncate">@message.SenderName</span>
+                                <small class="text-muted text-nowrap">@message.SendDate.ToString("dd MMM, HH:mm")</small>
+                            </div>
+                            <div class="small text-muted text-truncate">@message.Subject</div>
+                        </div>
+                        <span class="status-pill flex-shrink-0 @(message.IsRead ? "status-passive" : "status-active")">@(message.IsRead ? "Okundu" : "Yeni")</span>
+                    </a>
+                }
+
+                @if (!Model.LastMessages.Any())
+                {
+                    <div class="empty-state py-4"><i class="bi bi-inbox"></i>Henüz mesaj yok.</div>
+                }
+            </div>
+        </div>
+
+        <!-- 3. Kategori özeti (GroupBy) -->
+        <div class="col-xl-5">
+            <div class="dash-card">
+                <div class="dash-card-title">
+                    <span><i class="bi bi-pie-chart me-2"></i>Kategorilere Göre Projeler</span>
+                    <a asp-controller="Category" asp-action="CategoryList">Kategoriler <i class="bi bi-arrow-right"></i></a>
+                </div>
+
+                @if (Model.CategorySummaries.Any())
+                {
+                    <div style="height: 190px;" class="mb-3"><canvas id="categoryChart" aria-label="Kategorilere göre proje sayısı grafiği" role="img"></canvas></div>
+                    <table class="table table-sm align-middle mb-0 small">
+                        <thead><tr><th>Kategori</th><th class="text-center">Proje</th><th class="text-center">Aktif</th></tr></thead>
+                        <tbody>
+                            @foreach (var item in Model.CategorySummaries)
+                            {
+                                <tr>
+                                    <td>@item.CategoryName</td>
+                                    <td class="text-center fw-semibold">@item.ProjectCount</td>
+                                    <td class="text-center text-muted">@item.ActiveProjectCount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 }
                 else
                 {
-                    <span class="badge-soft c-rose">Yeni</span>
+                    <div class="empty-state py-4"><i class="bi bi-pie-chart"></i>Henüz proje yok.</div>
                 }
             </div>
-        }
+        </div>
     </div>
-</div>
+
+    <div class="row g-4">
+        <!-- 4. Son eklenen 3 proje -->
+        <div class="col-xl-7">
+            <div class="dash-card">
+                <div class="dash-card-title">
+                    <span><i class="bi bi-code-slash me-2"></i>Son Eklenen Projeler</span>
+                    <a asp-controller="Project" asp-action="ProjectList" asp-route-sort="recentlyAdded">Tümünü gör <i class="bi bi-arrow-right"></i></a>
+                </div>
+
+                @foreach (var project in Model.LastProjects)
+                {
+                    <a asp-controller="Project" asp-action="UpdateProject" asp-route-id="@project.ProjectId" class="dash-list-item">
+                        @if (!string.IsNullOrEmpty(project.ImageUrl))
+                        {
+                            <img src="@project.ImageUrl" alt="" class="rounded-2 border flex-shrink-0" style="width: 56px; height: 40px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <div class="exp-icon-bullet flex-shrink-0"><i class="bi bi-code-square"></i></div>
+                        }
+                        <div class="flex-grow-1 overflow-hidden">
+                            <div class="dash-item-title fw-semibold text-truncate">@project.ProjectTitle</div>
+                            <div class="small text-muted">@project.Category?.CategoryName</div>
+                        </div>
+                        <span class="status-pill flex-shrink-0 @(project.IsActive ? "status-active" : "status-passive")">@(project.IsActive ? "Aktif" : "Pasif")</span>
+                    </a>
+                }
+
+                @if (!Model.LastProjects.Any())
+                {
+                    <div class="empty-state py-4"><i class="bi bi-folder2-open"></i>Henüz proje eklenmemiş.</div>
+                }
+            </div>
+        </div>
+
+        <!-- 5. Hızlı erişim -->
+        <div class="col-xl-5">
+            <div class="dash-card">
+                <div class="dash-card-title"><span><i class="bi bi-lightning-charge me-2"></i>Hızlı Erişim</span></div>
+                <div class="row g-2">
+                    <div class="col-6"><a asp-controller="Project" asp-action="CreateProject" class="quick-action"><i class="bi bi-plus-square"></i>Yeni Proje Ekle</a></div>
+                    <div class="col-6"><a asp-controller="Message" asp-action="MessageList" asp-route-filter="unread" class="quick-action"><i class="bi bi-envelope-open"></i>Mesajları Gör</a></div>
+                    <div class="col-6"><a asp-controller="Skill" asp-action="CreateSkillItem" class="quick-action"><i class="bi bi-stars"></i>Yetenek Ekle</a></div>
+                    <div class="col-6"><a asp-controller="About" asp-action="Index" class="quick-action"><i class="bi bi-person-badge"></i>Hakkımda'yı Düzenle</a></div>
+                    <div class="col-12"><a asp-area="" asp-controller="Default" asp-action="Index" target="_blank" class="quick-action"><i class="bi bi-box-arrow-up-right"></i>Siteyi Önizle</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @if (Model.CategorySummaries.Any())
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script>
+            // Kategori özeti grafiği (Chart.js) — veriler GroupBy sonucundan gelir
+            const categoryData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                Model.CategorySummaries.Select(x => new { name = x.CategoryName, count = x.ProjectCount })));
+
+            new Chart(document.getElementById('categoryChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: categoryData.map(x => x.name),
+                    datasets: [{
+                        data: categoryData.map(x => x.count),
+                        backgroundColor: ['#9BB7A2', '#C58D79', '#A8B8CC', '#D6C3A5', '#B9A6C9', '#8FA9A0'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    cutout: '62%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} proje` } }
+                    }
+                }
+            });
+        </script>
+    }
+}

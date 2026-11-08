@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MYAcademy_PortfolyoProject.Areas.Admin.Models;
 using MYAcademy_PortfolyoProject.Context;
 
 namespace MYAcademy_PortfolyoProject.Areas.Admin.Controllers
@@ -15,11 +17,44 @@ namespace MYAcademy_PortfolyoProject.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.v1 = _context.Contacts.Count();
-            ViewBag.v2 = _context.Messages.Where(x => x.IsRead == false).Count();
-            ViewBag.v3 = _context.Messages.Where(x => x.IsRead == true).Count();
+            var model = new DashboardViewModel
+            {
+                // Count / Where
+                TotalProjectCount = _context.Projects.Count(),
+                ActiveProjectCount = _context.Projects.Count(x => x.IsActive),
+                SkillCount = _context.SkillItems.Count(),
+                ExperienceCount = _context.Experiences.Count(),
+                EducationCount = _context.Educations.Count(),
+                TotalMessageCount = _context.Messages.Count(),
+                UnreadMessageCount = _context.Messages.Where(x => !x.IsRead).Count(),
 
-            return View();
+                // OrderByDescending + Take: son 5 mesaj
+                LastMessages = _context.Messages
+                    .OrderByDescending(x => x.SendDate)
+                    .Take(5)
+                    .ToList(),
+
+                // Include + OrderByDescending + Take: son eklenen 3 proje (kategori adıyla)
+                LastProjects = _context.Projects
+                    .Include(x => x.Category)
+                    .OrderByDescending(x => x.CreatedDate)
+                    .Take(3)
+                    .ToList(),
+
+                // GroupBy: her kategoride kaç proje (ve kaç aktif proje) var
+                CategorySummaries = _context.Projects
+                    .GroupBy(x => x.Category!.CategoryName)
+                    .Select(g => new CategorySummary
+                    {
+                        CategoryName = g.Key,
+                        ProjectCount = g.Count(),
+                        ActiveProjectCount = g.Count(x => x.IsActive)
+                    })
+                    .OrderByDescending(x => x.ProjectCount)
+                    .ToList()
+            };
+
+            return View(model);
         }
     }
 }
