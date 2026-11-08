@@ -14,7 +14,12 @@ namespace MYAcademy_PortfolyoProject.ViewComponents.DefaultViewComponents
 
         public IViewComponentResult Invoke()
         {
-            var values = _context.Experiences.ToList();
+            // Sitede yalnızca aktif deneyimler, belirlenen sıraya göre gösterilir.
+            var values = _context.Experiences
+                .Where(x => x.IsActive)
+                .OrderBy(x => x.DisplayOrder)
+                .ThenByDescending(x => x.ExperienceId)
+                .ToList();
             return View(values);
         }
     }

@@ -1,0 +1,58 @@
+@model Experience
+@* Ekleme ve güncelleme sayfalarının ortak form alanları *@
+
+<div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-3"></div>
+<input type="hidden" asp-for="ExperienceId" />
+
+<div class="row g-3">
+    <div class="col-md-8">
+        <label asp-for="Title" class="form-label-custom">Pozisyon / Unvan <span class="required-star">*</span></label>
+        <input asp-for="Title" class="form-control-custom" placeholder="Örn: Stajyer — Yazılım Geliştirme" />
+        <span asp-validation-for="Title"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="CategoryName" class="form-label-custom">Tür <span class="required-star">*</span></label>
+        <input asp-for="CategoryName" class="form-control-custom" placeholder="Örn: Staj" list="experienceTypes" />
+        <datalist id="experienceTypes">
+            <option value="Tam Zamanlı"></option>
+            <option value="Yarı Zamanlı"></option>
+            <option value="Staj"></option>
+            <option value="Freelance"></option>
+            <option value="Gönüllü"></option>
+            <option value="Mentorluk"></option>
+            <option value="Topluluk"></option>
+        </datalist>
+        <span asp-validation-for="CategoryName"></span>
+    </div>
+
+    <div class="col-md-8">
+        <label asp-for="CompanyName" class="form-label-custom">Kurum / Şirket <span class="required-star">*</span></label>
+        <input asp-for="CompanyName" class="form-control-custom" placeholder="Örn: ROKETSAN" />
+        <span asp-validation-for="CompanyName"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="DisplayOrder" class="form-label-custom">Sıra</label>
+        <input asp-for="DisplayOrder" type="number" class="form-control-custom" />
+        <span asp-validation-for="DisplayOrder"></span>
+    </div>
+
+    <div class="col-md-12">
+        <label asp-for="Period" class="form-label-custom">Tarih Aralığı</label>
+        <input asp-for="Period" class="form-control-custom" placeholder="Örn: Tem 2025 – Eyl 2025 veya Oca 2026 – Devam ediyor" />
+        <span asp-validation-for="Period"></span>
+    </div>
+
+    <div class="col-md-12">
+        <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+        <textarea asp-for="Description" class="form-control-custom" rows="5"
+                  placeholder="Bu pozisyonda neler yaptınız, hangi teknolojileri kullandınız?"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-check form-switch">
+            <input asp-for="IsActive" class="form-check-input" type="checkbox" role="switch" />
+            <label asp-for="IsActive" class="form-check-label">Sitede göster</label>
+        </div>
+    </div>
+</div>

@@ -28,8 +28,12 @@
                         <h3 class="h5 fw-bold mb-0">@item.Title</h3>
                         <span class="badge bg-success-subtle text-success-emphasis fw-medium px-3 py-2 rounded-pill">@item.CategoryName</span>
                     </div>
-                    <div class="text-muted fw-semibold small mb-3 font-heading">
-                        <i class="bi bi-building me-1"></i> @item.CompanyName
+                    <div class="text-muted fw-semibold small mb-3 font-heading d-flex flex-wrap gap-3">
+                        <span><i class="bi bi-building me-1"></i> @item.CompanyName</span>
+                        @if (!string.IsNullOrWhiteSpace(item.Period))
+                        {
+                            <span><i class="bi bi-calendar3 me-1"></i> @item.Period</span>
+                        }
                     </div>
                     <p class="text-muted mb-0">
                         @item.Description
