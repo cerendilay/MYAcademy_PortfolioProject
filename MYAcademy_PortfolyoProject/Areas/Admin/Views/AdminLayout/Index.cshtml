@@ -1,0 +1,36 @@
+﻿
+<!DOCTYPE html>
+<html lang="tr">
+@await Component.InvokeAsync("_AdminLayoutHeadComponentPartial")
+<body>
+
+<div class="admin-wrapper">
+
+  <!-- ==================== 1. LEFT SIDEBAR ==================== -->
+        @await Component.InvokeAsync("_AdminLayoutSidebarComponentPartial")
+
+  <!-- ==================== 2. MAIN CONTENT AREA ==================== -->
+  <div class="admin-main">
+    
+    <!-- TOP NAVBAR -->
+            @await Component.InvokeAsync("_AdminLayoutNavbarComponentPartial")
+
+            @RenderBody()
+  </div>
+</div>
+
+
+<!-- ==================== TOAST NOTIFICATION ==================== -->
+<div class="toast-pill-success" id="actionToast">
+  <i class="bi bi-check-circle-fill text-success" style="font-size: 1.25rem;"></i>
+  <div>
+    <div style="font-weight:600; font-size:0.85rem;" id="toastTitle">Başarılı</div>
+    <div style="font-size:0.775rem; color:var(--text-secondary);" id="toastMsg">İşlem başarıyla gerçekleştirildi.</div>
+  </div>
+</div>
+
+<!-- Vanilla JavaScript Interactions -->
+    @await Component.InvokeAsync("_AdminLayoutScriptComponentPartial")
+
+</body>
+</html>

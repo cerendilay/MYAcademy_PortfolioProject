@@ -1,0 +1,44 @@
+﻿<header class="admin-navbar">
+    <div class="navbar-left">
+        <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Menüyü Aç/Kapat">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="breadcrumb-custom">
+            <a href="#"><i class="bi bi-house me-1"></i> Ana Sayfa</a>
+            <span class="separator">/</span>
+            <span class="active-crumb">#</span>
+        </div>
+    </div>
+
+    <div class="navbar-right">
+        <!-- Search bar -->
+        <div class="nav-search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Aranacak kelime..." id="navQuickSearch">
+        </div>
+
+        <!-- Quick Action Button -->
+        <a href="/Admin/Message/CreateMessage" class="btn-quick-add">
+            <i class="bi bi-plus-lg"></i>
+            <span>Hızlı Ekle</span>
+        </a>
+
+        <!-- Notification Bell -->
+        <a href="javascript:void(0)" class="icon-action-btn" title="Bildirimler" id="notificationBtn">
+            <i class="bi bi-bell"></i>
+            <span class="notification-dot"></span>
+        </a>
+
+        <!-- Messages / Quick Access -->
+        <a href="javascript:void(0)" class="icon-action-btn" title="Mesajlar">
+            <i class="bi bi-chat-left-text"></i>
+        </a>
+
+        <!-- Admin Profile Pill -->
+        <div class="nav-profile-pill">
+            <div class="nav-avatar-mini">AK</div>
+            <span class="d-none d-sm-inline font-weight-600" style="font-size:0.825rem; font-weight:600;">Admin</span>
+            <i class="bi bi-chevron-down text-muted" style="font-size: 0.7rem;"></i>
+        </div>
+    </div>
+</header>

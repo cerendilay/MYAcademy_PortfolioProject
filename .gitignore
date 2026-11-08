@@ -1,0 +1,13 @@
+# Visual Studio / .NET
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.rsuser
+.vscode/
+.idea/
+
+# Uploaded files (runtime)
+MYAcademy_PortfolyoProject/wwwroot/uploads/*
+!MYAcademy_PortfolyoProject/wwwroot/uploads/.gitkeep

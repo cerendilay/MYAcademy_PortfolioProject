@@ -1,0 +1,201 @@
+﻿@model MYAcademy_PortfolyoProject.Entities.Message
+@{
+    ViewData["Title"] = "UpdateMessage";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<style>
+    .um {
+        --g: #2f5d4e;
+        --g-soft: #e7efe9;
+        --line: #ebe8e1;
+    }
+
+    .um-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 1.75rem;
+        height: 100%;
+    }
+
+    .um-head {
+        display: flex;
+        align-items: center;
+        gap: .9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .um-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: var(--g-soft);
+        color: var(--g);
+        display: grid;
+        place-items: center;
+        font-size: 1.3rem;
+    }
+
+    .um-head h4 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .um-head small {
+        color: #8a8a85;
+    }
+
+    .um .form-label {
+        font-size: .85rem;
+        font-weight: 500;
+        color: #6b6b66;
+        margin-bottom: .4rem;
+    }
+
+    .um .form-control {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: .7rem .9rem;
+        background: #fcfbf9;
+    }
+
+        .um .form-control:focus {
+            border-color: var(--g);
+            background: #fff;
+            box-shadow: 0 0 0 .2rem rgba(47,93,78,.12);
+        }
+
+    .um textarea {
+        min-height: 220px;
+        resize: vertical;
+    }
+
+    .um-title {
+        font-size: .75rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: #9a9a94;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .um-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .9rem 1rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fcfbf9;
+    }
+
+        .um-status .form-check-input {
+            width: 2.6em;
+            height: 1.35em;
+            cursor: pointer;
+        }
+
+            .um-status .form-check-input:checked {
+                background-color: var(--g);
+                border-color: var(--g);
+            }
+
+    .um-btn {
+        background: var(--g);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: .75rem;
+        font-weight: 500;
+    }
+
+        .um-btn:hover {
+            background: #244a3e;
+            color: #fff;
+        }
+
+    .um-btn-light {
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: .75rem;
+        color: #555;
+    }
+
+        .um-btn-light:hover {
+            background: #f5f3ee;
+        }
+</style>
+
+<div class="um container-fluid py-3">
+    <form method="post">
+        <input type="hidden" asp-for="MessageId" />
+
+        <div class="row g-4">
+            <!-- Sol: Mesaj içeriği -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="um-card">
+                    <div class="um-head">
+                        <div class="um-icon"><i class="bi bi-envelope-open"></i></div>
+                        <div>
+                            <h4>Mesajı Güncelle</h4>
+                            <small>#@Model.MessageId numaralı mesajın bilgilerini düzenleyin.</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="SenderName" class="form-label">Ad Soyad</label>
+                            <input asp-for="SenderName" class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="SenderEmail" class="form-label">E-posta</label>
+                            <input asp-for="SenderEmail" type="email" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Subject" class="form-label">Konu</label>
+                        <input asp-for="Subject" class="form-control" required />
+                    </div>
+
+                    <div>
+                        <label asp-for="MessageDetail" class="form-label">Mesaj</label>
+                        <textarea asp-for="MessageDetail" class="form-control" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ: Durum ve işlemler -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="um-card d-flex flex-column">
+                    <div class="um-title">Mesaj Bilgileri</div>
+
+                    <div class="mb-3">
+                        <label asp-for="SendDate" class="form-label">Gönderim Tarihi</label>
+                        <input asp-for="SendDate" type="datetime-local" class="form-control" />
+                    </div>
+
+                    <label class="form-label">Durum</label>
+                    <div class="um-status form-check form-switch m-0">
+                        <span>@(Model.IsRead ? "Okundu" : "Okunmadı")</span>
+                        <input asp-for="IsRead" class="form-check-input m-0" role="switch" />
+                    </div>
+
+                    <div class="mt-auto pt-4 d-grid gap-2">
+                        <button type="submit" class="um-btn">Değişiklikleri Kaydet</button>
+                        <a asp-action="Index" class="um-btn-light text-center text-decoration-none">Vazgeç</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Switch değişince yanındaki yazıyı güncelle
+    document.querySelector('.um-status input').addEventListener('change', function () {
+        this.previousElementSibling.textContent = this.checked ? 'Okundu' : 'Okunmadı';
+    });
+</script>

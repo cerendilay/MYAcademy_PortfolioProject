@@ -1,0 +1,298 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+
+    // Dinamik veriler (controller'dan)
+    int total = ViewBag.v1;
+    int unread = ViewBag.v2;
+    int read = ViewBag.v3;
+    int rate = total == 0 ? 0 : read * 100 / total;
+
+    // Statik (UI) veriler
+    var labels = new[] { "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz" };
+    var counts = new[] { 4, 7, 3, 9, 6, 2, 5 };
+    int max = counts.Max();
+    var last = new[] {
+        (Name: "Ayşe Yılmaz",  Subject: "Proje teklifi",      Text: "Merhaba, web siteniz için bir teklif almak istiyorum.", Date: "03 Kas, 14:20", IsRead: false),
+        (Name: "Mehmet Kaya",  Subject: "İş birliği",         Text: "Portfolyonuzu inceledim, birlikte çalışmak isteriz.",   Date: "02 Kas, 10:05", IsRead: false),
+        (Name: "Zeynep Demir", Subject: "Teşekkürler",        Text: "Geçen haftaki görüşme için teşekkür ederim.",            Date: "01 Kas, 18:42", IsRead: true),
+        (Name: "Can Öztürk",   Subject: "Staj başvurusu",     Text: "Ekibinizde staj imkânı olup olmadığını öğrenmek isterim.", Date: "31 Eki, 09:15", IsRead: true)
+    };
+}
+
+<style>
+    .db {
+        --g: #2f5d4e;
+        --g-soft: #e7efe9;
+        --line: #ebe8e1;
+        --muted: #8a8a85;
+    }
+
+    .db-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 1.4rem;
+        height: 100%;
+    }
+
+    .db-title {
+        font-weight: 600;
+        margin-bottom: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .db-title small {
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .stat-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        font-size: 1.4rem;
+    }
+
+    .stat-val {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .stat-lbl {
+        color: var(--muted);
+        font-size: .85rem;
+        margin-top: .3rem;
+    }
+
+    .c-green {
+        background: var(--g-soft);
+        color: var(--g);
+    }
+
+    .c-blue {
+        background: #e6eef8;
+        color: #3b6ea5;
+    }
+
+    .c-rose {
+        background: #f9e7e7;
+        color: #b44b4b;
+    }
+
+    .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: .8rem;
+        height: 190px;
+    }
+
+    .bar {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        gap: .4rem;
+    }
+
+    .bar-fill {
+        width: 100%;
+        max-width: 42px;
+        background: var(--g);
+        border-radius: 8px 8px 4px 4px;
+        opacity: .85;
+        transition: opacity .2s;
+    }
+
+    .bar:hover .bar-fill {
+        opacity: 1;
+    }
+
+    .bar span {
+        font-size: .75rem;
+        color: var(--muted);
+    }
+
+    .bar b {
+        font-size: .8rem;
+    }
+
+    .donut {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin: .5rem auto 1.2rem;
+        display: grid;
+        place-items: center;
+        background: conic-gradient(var(--g) calc(var(--p) * 1%), var(--g-soft) 0);
+    }
+
+        .donut div {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+    .legend {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        font-size: .85rem;
+        color: var(--muted);
+    }
+
+        .legend i {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            margin-right: .35rem;
+        }
+
+    .msg-row {
+        display: flex;
+        align-items: center;
+        gap: .9rem;
+        padding: .8rem 0;
+        border-bottom: 1px solid var(--line);
+    }
+
+        .msg-row:last-child {
+            border-bottom: none;
+        }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--g-soft);
+        color: var(--g);
+        display: grid;
+        place-items: center;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .msg-body {
+        flex: 1;
+        min-width: 0;
+    }
+
+        .msg-body p {
+            margin: 0;
+            color: var(--muted);
+            font-size: .85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .badge-soft {
+        font-size: .72rem;
+        padding: .3rem .6rem;
+        border-radius: 20px;
+    }
+</style>
+
+<div class="db container-fluid py-3">
+
+    <!-- Dinamik istatistik kartları -->
+    <div class="row g-4 mb-4">
+        @{
+            var stats = new[] {
+                (Val: total,  Lbl: "Toplam Mesaj", Icon: "bi-envelope",             Cls: "c-green"),
+                (Val: unread, Lbl: "Okunmamış",    Icon: "bi-envelope-exclamation", Cls: "c-rose"),
+                (Val: read,   Lbl: "Okunmuş",      Icon: "bi-envelope-check",       Cls: "c-blue")
+            };
+        }
+        @foreach (var s in stats)
+        {
+            <div class="col-md-4">
+                <div class="db-card stat">
+                    <div class="stat-icon @s.Cls"><i class="bi @s.Icon"></i></div>
+                    <div>
+                        <div class="stat-val">@s.Val</div>
+                        <div class="stat-lbl">@s.Lbl</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Haftalık grafik (statik) -->
+        <div class="col-xl-8">
+            <div class="db-card">
+                <div class="db-title">Son 7 Gün <small>Günlük gelen mesajlar</small></div>
+                <div class="bars">
+                    @for (int i = 0; i < 7; i++)
+                    {
+                        <div class="bar">
+                            <b>@counts[i]</b>
+                            <div class="bar-fill" style="height:@(counts[i] * 100 / max)%"></div>
+                            <span>@labels[i]</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Okunma oranı (v1 ve v3'ten hesaplanır) -->
+        <div class="col-xl-4">
+            <div class="db-card">
+                <div class="db-title">Okunma Oranı</div>
+                <div class="donut" style="--p:@rate"><div>%@rate</div></div>
+                <div class="legend">
+                    <span><i style="background:var(--g)"></i>Okundu (@read)</span>
+                    <span><i style="background:var(--g-soft)"></i>Okunmadı (@unread)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Son mesajlar (statik) -->
+    <div class="db-card">
+        <div class="db-title">
+            Son Mesajlar
+            <a asp-area="Admin" asp-controller="Message" asp-action="MessageList" class="small text-decoration-none" style="color:var(--g)">Tümünü gör →</a>
+        </div>
+
+        @foreach (var m in last)
+        {
+            <div class="msg-row">
+                <div class="avatar">@m.Name.Substring(0, 1)</div>
+                <div class="msg-body">
+                    <strong>@m.Name</strong> · <span class="small">@m.Subject</span>
+                    <p>@m.Text</p>
+                </div>
+                <small class="text-muted d-none d-md-block">@m.Date</small>
+                @if (m.IsRead)
+                {
+                    <span class="badge-soft c-blue">Okundu</span>
+                }
+                else
+                {
+                    <span class="badge-soft c-rose">Yeni</span>
+                }
+            </div>
+        }
+    </div>
+</div>

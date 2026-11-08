@@ -1,0 +1,452 @@
+﻿@{
+   ViewData["Title"] = "ExperienceList";
+   Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+<!-- CONTENT BODY -->
+<main class="page-content-area">
+
+    <!-- Page Header Row -->
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Deneyimlerim Listesi</h1>
+            <p class="page-subtitle">Portfolyo sitenizde yer alacak deneyim içeriklerini buradan yönetebilirsiniz.</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-pastel-secondary" id="btnExport">
+                <i class="bi bi-download"></i>
+                <span>Dışa Aktar</span>
+            </button>
+            <button class="btn-pastel-primary" onclick="openAddModal()">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Deneyim Ekle</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 4 Statistics Summary Cards -->
+    <div class="stats-row">
+        <!-- 1. Toplam Deneyim -->
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-green">
+                <i class="bi bi-briefcase"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Toplam Deneyim</span>
+                <h3 class="stat-value" id="statTotalCount">4</h3>
+            </div>
+        </div>
+
+        <!-- 2. Aktif Kayıt -->
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-blue">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Aktif Kayıt</span>
+                <h3 class="stat-value" id="statActiveCount">3</h3>
+            </div>
+        </div>
+
+        <!-- 3. Pasif Kayıt -->
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-beige">
+                <i class="bi bi-pause-circle"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Pasif Kayıt</span>
+                <h3 class="stat-value" id="statPassiveCount">1</h3>
+            </div>
+        </div>
+
+        <!-- 4. Son Güncelleme -->
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-purple">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+                <span class="stat-label">Son Güncelleme</span>
+                <h3 class="stat-value" style="font-size: 1.05rem; font-weight: 700; line-height: 1.4;">12 Ekim 2026</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Experience Table Container -->
+    <div class="data-table-card">
+
+        <!-- Filter / Action Toolbar -->
+        <div class="table-filter-bar">
+            <div class="filters-left-group">
+                <div class="filter-search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="tableSearchInput" placeholder="Deneyim başlığına göre ara...">
+                </div>
+
+                <select class="filter-select" id="statusFilterSelect">
+                    <option value="all">Durum Seçiniz (Tümü)</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Pasif">Pasif</option>
+                </select>
+
+                <select class="filter-select" id="sortSelect">
+                    <option value="order-asc">Sıralama: Önce 1 (Artan)</option>
+                    <option value="order-desc">Sıralama: Önce 4 (Azalan)</option>
+                    <option value="title-asc">Başlık (A-Z)</option>
+                </select>
+            </div>
+
+            <div class="filters-right-group">
+                <button class="btn-table-util" id="btnRefreshTable" title="Tabloyu Yenile">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <span class="d-none d-md-inline">Yenile</span>
+                </button>
+                <button class="btn-table-util" id="btnBulkActions" title="Toplu İşlemler">
+                    <i class="bi bi-sliders"></i>
+                    <span class="d-none d-md-inline">Toplu İşlem</span>
+                </button>
+                <button class="btn-pastel-primary" style="padding: 7px 14px; font-size: 0.8rem;" onclick="openAddModal()">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>Ekle</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Experience Table -->
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table" id="experienceTable">
+                <thead>
+                    <tr>
+                        <th style="width: 44px; text-align: center;">
+                            <input type="checkbox" class="custom-checkbox" id="selectAllCheckbox" title="Tümünü Seç">
+                        </th>
+                        <th style="width: 60px;">ID</th>
+                        <th>Deneyim Başlığı</th>
+                        <th>Kurum / Şirket</th>
+                        <th>Çalışma Türü</th>
+                        <th>Tarih Aralığı</th>
+                        <th>Durum</th>
+                        <th style="text-align: center;">Sıralama</th>
+                        <th style="text-align: right; width: 140px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="experienceTableBody">
+                    <!-- Record 1 -->
+                    <tr data-id="1" data-status="Aktif" data-order="1">
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="custom-checkbox row-select-checkbox">
+                        </td>
+                        <td class="col-id">#01</td>
+                        <td>
+                            <div class="experience-title-cell">
+                                <div class="exp-icon-bullet">
+                                    <i class="bi bi-laptop"></i>
+                                </div>
+                                <div>
+                                    <span class="exp-title-text">Kıdemli Frontend Geliştirici</span>
+                                    <small class="text-muted d-block" style="font-size:0.75rem;">React, TypeScript, CSS Mimarisi</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="company-cell">
+                                <i class="bi bi-building company-badge-icon"></i>
+                                <span>Nova Digital Studio</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="work-type-badge">Tam Zamanlı</span>
+                        </td>
+                        <td>
+                            <span class="date-badge">
+                                <i class="bi bi-calendar2-range"></i>
+                                Ocak 2022 - Devam Ediyor
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-pill status-active">Aktif</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="order-badge">1</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="row-actions-group justify-content-end">
+                                <button class="btn-action-icon btn-view" title="Görüntüle" onclick="viewRecord(1)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn-action-icon btn-edit" title="Güncelle" onclick="editRecord(1)">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn-action-icon btn-delete" title="Sil" onclick="deleteRecord(1)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Record 2 -->
+                    <tr data-id="2" data-status="Aktif" data-order="2">
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="custom-checkbox row-select-checkbox">
+                        </td>
+                        <td class="col-id">#02</td>
+                        <td>
+                            <div class="experience-title-cell">
+                                <div class="exp-icon-bullet">
+                                    <i class="bi bi-brush"></i>
+                                </div>
+                                <div>
+                                    <span class="exp-title-text">UI Geliştirici</span>
+                                    <small class="text-muted d-block" style="font-size:0.75rem;">Design System & Bootstrap Arayüzler</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="company-cell">
+                                <i class="bi bi-building company-badge-icon"></i>
+                                <span>PixelCraft Agency</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="work-type-badge" style="background:#EEF2F6; color:#495D74; border-color:#DFE6EE;">Hibrit</span>
+                        </td>
+                        <td>
+                            <span class="date-badge">
+                                <i class="bi bi-calendar2-range"></i>
+                                Mart 2020 - Aralık 2021
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-pill status-active">Aktif</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="order-badge">2</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="row-actions-group justify-content-end">
+                                <button class="btn-action-icon btn-view" title="Görüntüle" onclick="viewRecord(2)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn-action-icon btn-edit" title="Güncelle" onclick="editRecord(2)">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn-action-icon btn-delete" title="Sil" onclick="deleteRecord(2)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Record 3 -->
+                    <tr data-id="3" data-status="Pasif" data-order="3">
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="custom-checkbox row-select-checkbox">
+                        </td>
+                        <td class="col-id">#03</td>
+                        <td>
+                            <div class="experience-title-cell">
+                                <div class="exp-icon-bullet">
+                                    <i class="bi bi-window-sidebar"></i>
+                                </div>
+                                <div>
+                                    <span class="exp-title-text">Web Arayüz Uzmanı</span>
+                                    <small class="text-muted d-block" style="font-size:0.75rem;">Kurumsal Web Siteleri & CMS Yönetimi</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="company-cell">
+                                <i class="bi bi-building company-badge-icon"></i>
+                                <span>BrightLabs Tech</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="work-type-badge" style="background:#F2EFF6; color:#6B537E; border-color:#E6DDEC;">Uzaktan</span>
+                        </td>
+                        <td>
+                            <span class="date-badge">
+                                <i class="bi bi-calendar2-range"></i>
+                                Haziran 2018 - Şubat 2020
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-pill status-passive">Pasif</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="order-badge">3</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="row-actions-group justify-content-end">
+                                <button class="btn-action-icon btn-view" title="Görüntüle" onclick="viewRecord(3)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn-action-icon btn-edit" title="Güncelle" onclick="editRecord(3)">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn-action-icon btn-delete" title="Sil" onclick="deleteRecord(3)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Record 4 -->
+                    <tr data-id="4" data-status="Aktif" data-order="4">
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="custom-checkbox row-select-checkbox">
+                        </td>
+                        <td class="col-id">#04</td>
+                        <td>
+                            <div class="experience-title-cell">
+                                <div class="exp-icon-bullet">
+                                    <i class="bi bi-code-square"></i>
+                                </div>
+                                <div>
+                                    <span class="exp-title-text">Junior Frontend Developer</span>
+                                    <small class="text-muted d-block" style="font-size:0.75rem;">HTML5, CSS3, JavaScript Bakımı</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="company-cell">
+                                <i class="bi bi-building company-badge-icon"></i>
+                                <span>Softline Works</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="work-type-badge">Tam Zamanlı</span>
+                        </td>
+                        <td>
+                            <span class="date-badge">
+                                <i class="bi bi-calendar2-range"></i>
+                                Temmuz 2016 - Mayıs 2018
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-pill status-active">Aktif</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="order-badge">4</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="row-actions-group justify-content-end">
+                                <button class="btn-action-icon btn-view" title="Görüntüle" onclick="viewRecord(4)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn-action-icon btn-edit" title="Güncelle" onclick="editRecord(4)">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button class="btn-action-icon btn-delete" title="Sil" onclick="deleteRecord(4)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Table Footer: Pagination & Counter -->
+        <div class="table-footer-area">
+            <div class="pagination-counter">
+                Toplam <strong>4</strong> kayıttan <strong>1-4</strong> arası gösteriliyor
+            </div>
+            <ul class="custom-pagination">
+                <li class="page-nav-item">
+                    <a href="#" class="page-nav-btn disabled" title="Önceki Sayfa">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+                <li class="page-nav-item">
+                    <a href="#" class="page-nav-btn active">1</a>
+                </li>
+                <li class="page-nav-item">
+                    <a href="#" class="page-nav-btn disabled" title="Sonraki Sayfa">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Quick Add / Edit Side Panel & ASP.NET Core Integration Note -->
+    <div class="side-drawer-card">
+        <div class="drawer-header">
+            <div>
+                <h3 class="drawer-title">
+                    <i class="bi bi-plus-square"></i>
+                    Hızlı Deneyim Oluşturma Paneli
+                </h3>
+                <span class="text-secondary" style="font-size:0.8rem;">Bu form, sayfa içi veya modal olarak ASP.NET Core MVC ViewModel'e doğrudan bind edilebilir.</span>
+            </div>
+            <span class="drawer-badge">ASP.NET Core MVC Uyumlu Form</span>
+        </div>
+
+        <form id="inlineExperienceForm" onsubmit="handleFormSubmit(event)">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label-custom">Deneyim Başlığı <span class="required-star">*</span></label>
+                    <input type="text" class="form-control-custom" placeholder="Örn: Senior Full Stack Developer" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label-custom">Şirket / Kurum Adı <span class="required-star">*</span></label>
+                    <input type="text" class="form-control-custom" placeholder="Örn: Acme Tech Ltd." required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label-custom">Çalışma Türü</label>
+                    <select class="form-control-custom">
+                        <option value="Tam Zamanlı">Tam Zamanlı</option>
+                        <option value="Yarı Zamanlı">Yarı Zamanlı</option>
+                        <option value="Hibrit">Hibrit</option>
+                        <option value="Uzaktan">Uzaktan</option>
+                        <option value="Stajyer">Stajyer</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label-custom">Başlangıç Tarihi</label>
+                    <input type="text" class="form-control-custom" placeholder="Örn: Ocak 2023">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label-custom">Bitiş Tarihi</label>
+                    <input type="text" class="form-control-custom" id="endDateInput" placeholder="Örn: Devam Ediyor">
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input custom-checkbox" type="checkbox" id="ongoingCheck" onchange="toggleOngoingDate(this)">
+                        <label class="form-check-label ms-1" for="ongoingCheck" style="font-size:0.85rem; color:var(--text-secondary);">
+                            Hala bu pozisyonda çalışmaya devam ediyorum
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label-custom">Açıklama / Görev Kapsamı</label>
+                    <textarea class="form-control-custom" rows="2" placeholder="Üstlenilen sorumluluklar, kullanılan teknolojiler ve başarılar..."></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label-custom">Durum</label>
+                    <select class="form-control-custom">
+                        <option value="Aktif">Aktif (Portfolyoda Göster)</option>
+                        <option value="Pasif">Pasif (Gizli)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label-custom">Sıralama Önceliği</label>
+                    <input type="number" class="form-control-custom" value="5" min="1">
+                </div>
+                <div class="col-md-4 d-flex align-items-end justify-content-end gap-2">
+                    <button type="reset" class="btn-pastel-secondary" style="padding: 8px 14px;">İptal</button>
+                    <button type="submit" class="btn-pastel-primary" style="padding: 8px 20px;">
+                        <i class="bi bi-check-lg"></i>
+                        <span>Kaydet</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="aspnet-tip-box">
+            <i class="bi bi-info-circle-fill" style="color:var(--accent-primary-hover); font-size:1.1rem;"></i>
+            <div>
+                <strong>Geliştirici Notu (ASP.NET Core MVC):</strong> Bu arayüz <code>@@model ExperienceViewModel</code> nesnesi ile <code>[HttpPost] CreateExperience</code> Controller aksiyonlarına bağlanmaya hazır HTML semantiğine ve data attributelerine sahiptir.
+            </div>
+        </div>
+    </div>
+
+</main>

@@ -1,0 +1,733 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+    @await Component.InvokeAsync("_DefaultHeaderComponentPartial")
+<body>
+
+  <!-- Fixed Navigation Bar -->
+    @await Component.InvokeAsync("_DefaultNavbarComponentPartial")
+
+  <main>
+    <!-- 4. Hero Section -->
+        @await Component.InvokeAsync("_DefaultHeroSectionComponentPartial")
+
+    <!-- 5. About Me Section -->
+    <section id="about" class="bg-white border-top border-bottom">
+      <div class="container">
+        <div class="row align-items-center gy-5">
+          <!-- Left Column: Portrait and visual composition -->
+          <div class="col-lg-5 reveal-on-scroll">
+            <div class="about-img-wrap">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOoGFL_RUXVi18KeTYZHtpMvWTtuGQlha2lSBEJIb3UBD2AHmHUMcwWkQuBFy2Ih2G3UQdItXjfmoP7gBHBbjDYT0TyYqrhY0j_ZslJZF6gFDTY3UEE3z56G-mss_yPIXrKHzkT6NmYtiU0oNmOWhuVL11uNPnRc-VMnSg-ZRgxS00UWdSipCRY2Dwo_lCXz0hBr0-rvvqSsoFJDYHrmyVLWyIbSRsdGcs24JgjX_388FLX_3wUEy8" alt="Murat Yücedağ portre" class="w-100" style="height: 540px; object-fit: cover; object-position: center top;">
+              <div class="p-3 bg-light border-top d-flex align-items-center justify-content-between">
+                <span class="small text-muted font-heading">Murat Yücedağ, İstanbul</span>
+                <span class="badge bg-secondary-subtle text-dark fw-medium">Senior Developer</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Story & Stats -->
+          <div class="col-lg-7 ps-lg-5 reveal-on-scroll">
+            <div class="eyebrow-badge">
+              <i class="bi bi-person-lines-fill"></i> BENİ TANIYIN
+            </div>
+            <h2 class="section-title">
+              Teknolojiye Tutkuyla Bağlı Bir Yolculuk.
+            </h2>
+            <div class="text-muted fs-5 mb-4 lh-base">
+              <p class="mb-3">
+                Merhaba, ben <strong>Murat Yücedağ</strong>. Yazılım geliştirme, yazılım eğitimi ve modern teknolojiler üzerine çalışan bir yazılım geliştiricisiyim. Özellikle <strong>.NET ekosistemi</strong>, yazılım mimarileri ve yapay zeka destekli uygulamalar geliştirme alanlarında çalışmalar yürütüyorum.
+              </p>
+              <p class="mb-4">
+                Teknolojinin yalnızca kod yazmaktan ibaret olmadığına; aynı zamanda problem çözmek, değer üretmek ve bilgiyi paylaşmak olduğuna inanıyorum. Geliştirdiğim projeler ve hazırladığım eğitimlerle yazılım dünyasına katkı sağlamayı hedefliyorum.
+              </p>
+            </div>
+
+            <!-- Statistics -->
+            <div class="row g-4 pt-2 pb-4 border-top border-bottom mb-4">
+              <div class="col-4">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Yıl Deneyim</div>
+              </div>
+              <div class="col-4">
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Eğitim İçeriği</div>
+              </div>
+              <div class="col-4">
+                <div class="stat-number">200K+</div>
+                <div class="stat-label">Öğrenci</div>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+              <a href="#" class="btn-sage" onclick="alert('Özgeçmiş PDF dosyası hazırlandı.'); return false;">
+                <i class="bi bi-file-earmark-pdf"></i>
+                <span>Özgeçmişimi İncele</span>
+              </a>
+              <a href="#contact" class="btn-secondary-custom">
+                <span>Bana Ulaşın</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Skills Section -->
+    <section id="skills">
+      <div class="container">
+        <div class="section-header text-center mx-auto reveal-on-scroll" style="max-width: 680px;">
+          <div class="eyebrow-badge">
+            <i class="bi bi-stack"></i> TEKNOLOJİ YIĞINIM
+          </div>
+          <h2 class="section-title">
+            Kullandığım Teknolojiler ve Uzmanlık Alanlarım
+          </h2>
+          <p class="section-description mx-auto">
+            Bir fikrin hayata geçirilmesinden ölçeklenebilir bir yazılım ürününe dönüşmesine kadar farklı teknolojilerle çalışıyorum.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <!-- Category 1: Backend -->
+          <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="skill-card">
+              <div class="skill-icon-box">
+                <i class="bi bi-server"></i>
+              </div>
+              <h3 class="h5 fw-bold mb-3">Backend Geliştirme</h3>
+              <p class="text-muted small mb-4">Yüksek performanslı, güvenilir ve sürdürülebilir kurumsal sunucu taraflı mimariler.</p>
+              <div class="d-flex flex-wrap">
+                <span class="tech-badge">C#</span>
+                <span class="tech-badge">ASP.NET Core</span>
+                <span class="tech-badge">Web API</span>
+                <span class="tech-badge">Entity Framework Core</span>
+                <span class="tech-badge">Dapper</span>
+                <span class="tech-badge">LINQ</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 2: Frontend -->
+          <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="skill-card">
+              <div class="skill-icon-box">
+                <i class="bi bi-layout-wtf"></i>
+              </div>
+              <h3 class="h5 fw-bold mb-3">Frontend Teknolojileri</h3>
+              <p class="text-muted small mb-4">Temiz, erişilebilir, duyarlı ve modern tarayıcı standartlarına uygun kullanıcı arayüzleri.</p>
+              <div class="d-flex flex-wrap">
+                <span class="tech-badge">HTML5</span>
+                <span class="tech-badge">CSS3</span>
+                <span class="tech-badge">Bootstrap</span>
+                <span class="tech-badge">JavaScript</span>
+                <span class="tech-badge">Responsive Web Design</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 3: Databases -->
+          <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="skill-card">
+              <div class="skill-icon-box">
+                <i class="bi bi-database"></i>
+              </div>
+              <h3 class="h5 fw-bold mb-3">Veritabanı Teknolojileri</h3>
+              <p class="text-muted small mb-4">İlişkisel ve NoSQL veritabanı modelleme, indeksleme ve önbellekleme stratejileri.</p>
+              <div class="d-flex flex-wrap">
+                <span class="tech-badge">Microsoft SQL Server</span>
+                <span class="tech-badge">PostgreSQL</span>
+                <span class="tech-badge">MongoDB</span>
+                <span class="tech-badge">Redis</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 4: Software Architecture -->
+          <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="skill-card">
+              <div class="skill-icon-box">
+                <i class="bi bi-diagram-3"></i>
+              </div>
+              <h3 class="h5 fw-bold mb-3">Yazılım Mimarileri</h3>
+              <p class="text-muted small mb-4">Ölçeklenebilir, test edilebilir ve endüstri standardı modern kodlama tasarım desenleri.</p>
+              <div class="d-flex flex-wrap">
+                <span class="tech-badge">Clean Architecture</span>
+                <span class="tech-badge">Onion Architecture</span>
+                <span class="tech-badge">Microservices</span>
+                <span class="tech-badge">CQRS</span>
+                <span class="tech-badge">Repository Pattern</span>
+                <span class="tech-badge">SOLID Principles</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 5: AI & Integrations -->
+          <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="skill-card">
+              <div class="skill-icon-box">
+                <i class="bi bi-cpu"></i>
+              </div>
+              <h3 class="h5 fw-bold mb-3">Yapay Zeka & Entegrasyonlar</h3>
+              <p class="text-muted small mb-4">Büyük dil modelleri, otonom yapay zeka ajanları ve akıllı sistem entegrasyonları.</p>
+              <div class="d-flex flex-wrap">
+                <span class="tech-badge">OpenAI API</span>
+                <span class="tech-badge">Google Gemini</span>
+                <span class="tech-badge">Claude AI</span>
+                <span class="tech-badge">Prompt Engineering</span>
+                <span class="tech-badge">AI Agents</span>
+                <span class="tech-badge">REST API Integrations</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 6: Tools & Processes -->
+          <div class="col-md-6 col-lg-4 reveal-on-scroll">
+            <div class="skill-card">
+              <div class="skill-icon-box">
+                <i class="bi bi-gear-wide-connected"></i>
+              </div>
+              <h3 class="h5 fw-bold mb-3">Araçlar & Süreçler</h3>
+              <p class="text-muted small mb-4">Versiyon kontrolü, konteynerleştirme, sürekli entegrasyon ve çevik proje yönetimi.</p>
+              <div class="d-flex flex-wrap">
+                <span class="tech-badge">Git & GitHub</span>
+                <span class="tech-badge">Docker</span>
+                <span class="tech-badge">Postman</span>
+                <span class="tech-badge">Visual Studio</span>
+                <span class="tech-badge">Agile / Scrum</span>
+                <span class="tech-badge">CI/CD</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Professional Experience Section -->
+        @await Component.InvokeAsync("_DefaultExperienceComponentPartial")
+
+    <!-- 8. Featured Projects Section -->
+    <section id="projects">
+      <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3 reveal-on-scroll">
+          <div>
+            <div class="eyebrow-badge">
+              <i class="bi bi-folder-check"></i> SEÇİLMİŞ ÇALIŞMALAR
+            </div>
+            <h2 class="section-title mb-1">
+              Fikirden Ürüne Dönüşen Projeler
+            </h2>
+            <p class="section-description mb-0">
+              Öğrenme, üretme ve problem çözme süreçlerimin birer yansıması olan projelerimden bazıları.
+            </p>
+          </div>
+
+          <!-- Filter Buttons -->
+          <div class="d-flex flex-wrap gap-2" id="projectFilters">
+            <button class="filter-btn active" data-filter="all">Tümü</button>
+            <button class="filter-btn" data-filter="web">Web Uygulamaları</button>
+            <button class="filter-btn" data-filter="ai">Yapay Zeka</button>
+            <button class="filter-btn" data-filter="mobile">Mobil</button>
+            <button class="filter-btn" data-filter="microservices">Mikroservisler</button>
+          </div>
+        </div>
+
+        <!-- Project Grid -->
+        <div class="row g-4" id="projectGrid">
+          <!-- Project 1: AI Travel Assistant -->
+          <div class="col-lg-6 project-item reveal-on-scroll" data-category="ai web">
+            <div class="project-card">
+              <div class="project-thumb-wrap">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1gZJs_U2YiOQIR5mnZfZQhk69l0J1t4KX1skTA1nf6ScbSR2jKax_uA0cjYpML1P329_5ob3neM5V6FA8UG-h5TVzdc-lG9TtWsrgwuUNRZYKyLPchpomRHp4KxTdXS-Q9aE698Qj3JKm_sujki7qvlEwyF6uVSEWbd99t86o8fF3p2kVXJ8-p4lsR-p0GFzkNNc0KRVhgQNx1bTY63Cc3VQiPHywioukY4cwSNcLnrBpzDGhlk23" alt="Yapay Zeka Destekli Seyahat Asistanı" class="project-thumb-img">
+                <span class="project-category-tag">Yapay Zeka & Web</span>
+              </div>
+              <div class="project-body">
+                <h3 class="h4 fw-bold mb-2">1. Yapay Zeka Destekli Seyahat Asistanı</h3>
+                <p class="text-muted small mb-4 flex-grow-1">
+                  Yapay zeka servisleri ve gerçek zamanlı veri entegrasyonlarıyla kişiselleştirilmiş seyahat önerileri sunan uygulama.
+                </p>
+                <div class="mb-4">
+                  <span class="tech-badge">ASP.NET Core</span>
+                  <span class="tech-badge">Web API</span>
+                  <span class="tech-badge">OpenAI</span>
+                  <span class="tech-badge">SQL Server</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                  <a href="#contact" class="btn-sage btn-sm">
+                    <span>Projeyi İncele</span>
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                  <span class="text-muted small"><i class="bi bi-git me-1"></i>Açık Kaynak</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2: Microservices E-Commerce -->
+          <div class="col-lg-6 project-item reveal-on-scroll" data-category="microservices web">
+            <div class="project-card">
+              <div class="project-thumb-wrap" style="background: #e9edea;">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1gZJs_U2YiOQIR5mnZfZQhk69l0J1t4KX1skTA1nf6ScbSR2jKax_uA0cjYpML1P329_5ob3neM5V6FA8UG-h5TVzdc-lG9TtWsrgwuUNRZYKyLPchpomRHp4KxTdXS-Q9aE698Qj3JKm_sujki7qvlEwyF6uVSEWbd99t86o8fF3p2kVXJ8-p4lsR-p0GFzkNNc0KRVhgQNx1bTY63Cc3VQiPHywioukY4cwSNcLnrBpzDGhlk23" alt="Mikroservis E-Ticaret Platformu" class="project-thumb-img" style="filter: hue-rotate(25deg);">
+                <span class="project-category-tag">Mikroservis Mimarisi</span>
+              </div>
+              <div class="project-body">
+                <h3 class="h4 fw-bold mb-2">2. Mikroservis E-Ticaret Platformu</h3>
+                <p class="text-muted small mb-4 flex-grow-1">
+                  Bağımsız servisler, dağıtık sistem bileşenleri ve modern backend teknolojileriyle geliştirilen e-ticaret altyapısı.
+                </p>
+                <div class="mb-4">
+                  <span class="tech-badge">.NET</span>
+                  <span class="tech-badge">Microservices</span>
+                  <span class="tech-badge">Docker</span>
+                  <span class="tech-badge">Redis</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                  <a href="#contact" class="btn-sage btn-sm">
+                    <span>Projeyi İncele</span>
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                  <span class="text-muted small"><i class="bi bi-shield-check me-1"></i>Production Ready</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3: Smart Sales Analytics -->
+          <div class="col-lg-6 project-item reveal-on-scroll" data-category="ai web">
+            <div class="project-card">
+              <div class="project-thumb-wrap" style="background: #f0e9e4;">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1gZJs_U2YiOQIR5mnZfZQhk69l0J1t4KX1skTA1nf6ScbSR2jKax_uA0cjYpML1P329_5ob3neM5V6FA8UG-h5TVzdc-lG9TtWsrgwuUNRZYKyLPchpomRHp4KxTdXS-Q9aE698Qj3JKm_sujki7qvlEwyF6uVSEWbd99t86o8fF3p2kVXJ8-p4lsR-p0GFzkNNc0KRVhgQNx1bTY63Cc3VQiPHywioukY4cwSNcLnrBpzDGhlk23" alt="Akıllı Satış Analiz Platformu" class="project-thumb-img" style="filter: sepia(0.2);">
+                <span class="project-category-tag">Makine Öğrenmesi & Web</span>
+              </div>
+              <div class="project-body">
+                <h3 class="h4 fw-bold mb-2">3. Akıllı Satış Analiz Platformu</h3>
+                <p class="text-muted small mb-4 flex-grow-1">
+                  Veri analizi ve makine öğrenmesi teknikleriyle satış eğilimlerini analiz eden ve tahminler üreten yönetim platformu.
+                </p>
+                <div class="mb-4">
+                  <span class="tech-badge">ASP.NET Core</span>
+                  <span class="tech-badge">ML.NET</span>
+                  <span class="tech-badge">SQL Server</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                  <a href="#contact" class="btn-sage btn-sm">
+                    <span>Projeyi İncele</span>
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                  <span class="text-muted small"><i class="bi bi-graph-up me-1"></i>Analitik</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 4: Mobile Travel Booking -->
+          <div class="col-lg-6 project-item reveal-on-scroll" data-category="mobile">
+            <div class="project-card">
+              <div class="project-thumb-wrap" style="background: #e2e8e5;">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1gZJs_U2YiOQIR5mnZfZQhk69l0J1t4KX1skTA1nf6ScbSR2jKax_uA0cjYpML1P329_5ob3neM5V6FA8UG-h5TVzdc-lG9TtWsrgwuUNRZYKyLPchpomRHp4KxTdXS-Q9aE698Qj3JKm_sujki7qvlEwyF6uVSEWbd99t86o8fF3p2kVXJ8-p4lsR-p0GFzkNNc0KRVhgQNx1bTY63Cc3VQiPHywioukY4cwSNcLnrBpzDGhlk23" alt="Mobil Seyahat Rezervasyon Uygulaması" class="project-thumb-img" style="filter: brightness(0.95);">
+                <span class="project-category-tag">Mobil Uygulama</span>
+              </div>
+              <div class="project-body">
+                <h3 class="h4 fw-bold mb-2">4. Mobil Seyahat Rezervasyon Uygulaması</h3>
+                <p class="text-muted small mb-4 flex-grow-1">
+                  Modern mobil arayüzler ve dinamik rezervasyon süreçleriyle oluşturulan kullanıcı odaklı seyahat uygulaması.
+                </p>
+                <div class="mb-4">
+                  <span class="tech-badge">.NET MAUI</span>
+                  <span class="tech-badge">C#</span>
+                  <span class="tech-badge">SQLite</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                  <a href="#contact" class="btn-sage btn-sm">
+                    <span>Projeyi İncele</span>
+                    <i class="bi bi-arrow-up-right"></i>
+                  </a>
+                  <span class="text-muted small"><i class="bi bi-phone me-1"></i>Cross-Platform</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-5">
+          <a href="#contact" class="btn-secondary-custom px-4 py-3">
+            <span>Tüm Projelerimi Gör</span>
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Education Section -->
+    <section id="education" class="bg-white border-top border-bottom">
+      <div class="container">
+        <div class="row gy-5">
+          <!-- Left: Timeline -->
+          <div class="col-lg-7 reveal-on-scroll">
+            <div class="eyebrow-badge">
+              <i class="bi bi-mortarboard-fill"></i> AKADEMİK YOLCULUK
+            </div>
+            <h2 class="section-title mb-4">
+              Eğitim Hayatım
+            </h2>
+
+            <div class="d-flex flex-column gap-4">
+              <!-- Degree 1 -->
+              <div class="p-4 rounded-4 border bg-light">
+                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                  <h3 class="h5 fw-bold mb-0">Yüksek Lisans — İnternet ve Bilişim Teknolojileri Yönetimi</h3>
+                  <span class="badge bg-secondary-subtle text-dark">Akademik</span>
+                </div>
+                <p class="text-muted small mb-0">
+                  Yapay zeka ajanları, büyük dil modelleri ve akıllı sistemler üzerine akademik çalışmalar.
+                </p>
+              </div>
+
+              <!-- Degree 2 -->
+              <div class="p-4 rounded-4 border bg-light">
+                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                  <h3 class="h5 fw-bold mb-0">Ön Lisans — Turizm ve Seyahat Hizmetleri</h3>
+                  <span class="badge bg-secondary-subtle text-dark">Mezuniyet</span>
+                </div>
+                <div class="text-muted fw-semibold small mb-2 font-heading">
+                  Anadolu Üniversitesi
+                </div>
+                <p class="text-muted small mb-0">
+                  Kişilerarası iletişim, kriz yönetimi ve analitik problem çözme yetkinliklerinin temeli.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Learning Philosophy Quote -->
+          <div class="col-lg-5 ps-lg-4 d-flex align-items-center reveal-on-scroll">
+            <div class="p-4 p-md-5 rounded-4 border w-100" style="background-color: var(--bg-primary);">
+              <i class="bi bi-quote fs-1 text-muted opacity-50"></i>
+              <blockquote class="fs-4 fw-bold font-heading my-3 text-dark">
+                "Öğrenmek bir varış noktası değil, sürekli devam eden bir yolculuktur."
+              </blockquote>
+              <p class="text-muted small mb-0 lh-lg">
+                Yazılım dünyasındaki hızlı dönüşüm; sürekli araştırmayı, yeni paradigmaları benimsemeyi ve edinilen bilgi birikimini cömertçe paylaşmayı gerektirir.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Personal Philosophy Section -->
+    <section class="philosophy-section text-center">
+      <div class="container">
+        <div class="mx-auto reveal-on-scroll" style="max-width: 820px;">
+          <div class="mb-3 text-secondary" style="font-size: 2.5rem; line-height: 1;">
+            <i class="bi bi-code-slash text-light opacity-50"></i>
+          </div>
+          <p class="philosophy-quote mb-4">
+            "İyi yazılım yalnızca çalışan kod değil, gerçek bir probleme üretilmiş anlamlı bir çözümdür."
+          </p>
+          <div class="d-inline-flex align-items-center gap-2 text-white-50 small font-heading">
+            <span class="w-12 h-px bg-white-50"></span>
+            <span>Murat Yücedağ — Yazılım Felsefesi</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Contact Section -->
+    <section id="contact">
+      <div class="container">
+        <div class="row gy-5">
+          <!-- Left Column: Contact Info -->
+          <div class="col-lg-5 reveal-on-scroll">
+            <div class="eyebrow-badge">
+              <i class="bi bi-envelope-paper-fill"></i> İLETİŞİME GEÇELİM
+            </div>
+            <h2 class="section-title">
+              Harika Bir Fikrin mi Var? Birlikte Hayata Geçirelim.
+            </h2>
+            <p class="text-muted mb-4 fs-6">
+              Yeni projeler, eğitimler, iş birlikleri veya yalnızca teknoloji üzerine sohbet etmek için benimle iletişime geçebilirsin.
+            </p>
+
+            <div class="d-flex flex-column gap-3 mb-4">
+              <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                  <i class="bi bi-envelope"></i>
+                </div>
+                <div>
+                  <div class="text-muted small">E-posta</div>
+                  <div class="fw-semibold">murat.yucedag@example.com</div>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                  <i class="bi bi-geo-alt"></i>
+                </div>
+                <div>
+                  <div class="text-muted small">Konum</div>
+                  <div class="fw-semibold">İstanbul, Türkiye</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Social links -->
+            <div class="pt-2">
+              <div class="text-muted small font-heading fw-semibold mb-2">Sosyal Ağlar:</div>
+              <div class="d-flex gap-2">
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-pill" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-pill" title="GitHub"><i class="bi bi-github"></i></a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-pill" title="YouTube"><i class="bi bi-youtube"></i></a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-pill" title="Instagram"><i class="bi bi-instagram"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Form -->
+          <div class="col-lg-7 ps-lg-5 reveal-on-scroll">
+            <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+              <form id="contactForm" onsubmit="event.preventDefault(); validateForm();">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="fullName" class="form-label small fw-semibold">Adınız Soyadınız *</label>
+                    <input type="text" class="form-control form-control-custom" id="fullName" placeholder="Örn: Ahmet Yılmaz" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="emailAddr" class="form-label small fw-semibold">E-posta Adresiniz *</label>
+                    <input type="email" class="form-control form-control-custom" id="emailAddr" placeholder="ad@ornek.com" required>
+                  </div>
+                  <div class="col-12">
+                    <label for="subject" class="form-label small fw-semibold">Konu</label>
+                    <input type="text" class="form-control form-control-custom" id="subject" placeholder="Örn: Kurumsal .NET Eğitimi veya Danışmanlık">
+                  </div>
+                  <div class="col-12">
+                    <label for="message" class="form-label small fw-semibold">Mesajınız *</label>
+                    <textarea class="form-control form-control-custom" id="message" rows="5" placeholder="Projeniz veya sorunuz hakkında detayları paylaşın..." required></textarea>
+                  </div>
+                  <div class="col-12 pt-2">
+                    <button type="submit" class="btn-sage w-100 justify-content-center py-3 fs-6">
+                      <i class="bi bi-send-fill"></i>
+                      <span>Mesajımı Gönder</span>
+                    </button>
+                    <div id="formFeedback" class="mt-2 text-center small text-muted"></div>
+                    <div class="text-muted text-center small mt-3" style="font-size: 0.78rem;">
+                      <i class="bi bi-shield-check me-1"></i> Gönderilen bilgiler gizlilik ilkeleri doğrultusunda korunmaktadır.
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 12. Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-between pb-4 border-bottom gap-3">
+        <div>
+          <a class="navbar-brand-custom" href="#home">
+            <span>Murat Yücedağ.</span>
+          </a>
+          <p class="text-muted small mb-0 mt-1">Kod, yaratıcılık ve sürekli öğrenme.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="d-flex gap-3">
+          <a href="#home" class="text-decoration-none text-muted small fw-medium">Ana Sayfa</a>
+          <a href="#about" class="text-decoration-none text-muted small fw-medium">Hakkımda</a>
+          <a href="#projects" class="text-decoration-none text-muted small fw-medium">Projelerim</a>
+          <a href="#contact" class="text-decoration-none text-muted small fw-medium">İletişim</a>
+        </div>
+
+        <button class="back-to-top-btn" id="backToTop" title="Yukarı Çık">
+          <i class="bi bi-arrow-up"></i>
+        </button>
+      </div>
+
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-3 gap-2">
+        <div class="text-muted small">
+          © 2026 Murat Yücedağ. Tüm hakları saklıdır.
+        </div>
+        <div class="d-flex gap-2">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-muted small text-decoration-none me-2"><i class="bi bi-github"></i> GitHub</a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="text-muted small text-decoration-none me-2"><i class="bi bi-linkedin"></i> LinkedIn</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="text-muted small text-decoration-none me-2"><i class="bi bi-youtube"></i> YouTube</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="text-muted small text-decoration-none"><i class="bi bi-instagram"></i> Instagram</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Vanilla JavaScript for Interactivity -->
+  <script>
+    // 1. Typewriter Animation for Hero Section
+    (function initTypewriter() {
+      const phrases = [
+        "Yazılım Geliştiricisi",
+        ".NET Eğitmeni",
+        "Teknoloji İçerik Üreticisi",
+        "Yapay Zeka Meraklısı",
+        "Yazılım Mimarı"
+      ];
+      const targetElement = document.getElementById("typewriterText");
+      if (!targetElement) return;
+
+      let phraseIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      const typeSpeed = 80;
+      const deleteSpeed = 40;
+      const delayBetween = 1800;
+
+      function typeCycle() {
+        const currentPhrase = phrases[phraseIndex];
+        if (isDeleting) {
+          targetElement.textContent = currentPhrase.substring(0, charIndex - 1);
+          charIndex--;
+        } else {
+          targetElement.textContent = currentPhrase.substring(0, charIndex + 1);
+          charIndex++;
+        }
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+          setTimeout(() => {
+            isDeleting = true;
+            typeCycle();
+          }, delayBetween);
+          return;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(typeCycle, 300);
+          return;
+        }
+
+        setTimeout(typeCycle, isDeleting ? deleteSpeed : typeSpeed);
+      }
+
+      typeCycle();
+    })();
+
+    // 2. Fixed Navbar on Scroll
+    window.addEventListener("scroll", function() {
+      const navbar = document.getElementById("mainNavbar");
+      if (window.scrollY > 40) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+
+    // 3. Active Nav Link on Scroll Spy
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-link-custom");
+
+    function updateActiveNav() {
+      const scrollY = window.pageYOffset;
+      sections.forEach(current => {
+        const sectionHeight = current.offsetHeight;
+        const sectionTop = current.offsetTop - 120;
+        const sectionId = current.getAttribute("id");
+
+        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+          navLinks.forEach(link => {
+            link.classList.remove("active");
+            if (link.getAttribute("href") === "#" + sectionId) {
+              link.classList.add("active");
+            }
+          });
+        }
+      });
+    }
+    window.addEventListener("scroll", updateActiveNav);
+
+    // 4. Mobile Menu Auto-close on click
+    document.querySelectorAll(".mobile-nav-link").forEach(link => {
+      link.addEventListener("click", () => {
+        const mobileMenu = document.getElementById("mobileMenu");
+        if (mobileMenu && mobileMenu.classList.contains("show")) {
+          const bsCollapse = bootstrap.Collapse.getInstance(mobileMenu);
+          if (bsCollapse) bsCollapse.hide();
+        }
+      });
+    });
+
+    // 5. Project Filtering (Vanilla JS)
+    const filterButtons = document.querySelectorAll("#projectFilters .filter-btn");
+    const projectItems = document.querySelectorAll("#projectGrid .project-item");
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const filterValue = btn.getAttribute("data-filter");
+        projectItems.forEach(item => {
+          const categories = item.getAttribute("data-category") || "";
+          if (filterValue === "all" || categories.includes(filterValue)) {
+            item.style.display = "block";
+            item.style.opacity = "1";
+          } else {
+            item.style.display = "none";
+            item.style.opacity = "0";
+          }
+        });
+      });
+    });
+
+    // 6. Back to Top Button
+    const backToTopBtn = document.getElementById("backToTop");
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    // 7. Intersection Observer for Scroll Reveals
+    const revealElements = document.querySelectorAll(".reveal-on-scroll");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: "0px 0px -40px 0px"
+    });
+
+    revealElements.forEach(el => observer.observe(el));
+
+    // 8. Contact Form Client-side Validation (ready for ASP.NET Core)
+    function validateForm() {
+      const name = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("emailAddr").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const feedback = document.getElementById("formFeedback");
+
+      if (!name || !email || !message) {
+        feedback.innerHTML = '<span class="text-danger">Lütfen tüm zorunlu alanları doldurun.</span>';
+        return;
+      }
+
+      const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+      if (!emailRegex.test(email)) {
+        feedback.innerHTML = '<span class="text-danger">Geçerli bir e-posta adresi giriniz.</span>';
+        return;
+      }
+
+      feedback.innerHTML = '<span class="text-success"><i class="bi bi-check-circle me-1"></i> Form doğrulandı. (ASP.NET Core Controller entegrasyonu için hazırdır)</span>';
+    }
+  </script>
+</body>
+</html>
