@@ -3,13 +3,13 @@ using MYAcademy_PortfolyoProject.Entities;
 
 namespace MYAcademy_PortfolyoProject.Context
 {
-    public class PortfolyoContext:DbContext
+    public class PortfolyoContext : DbContext
     {
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // Bağlantı ayarı Program.cs'te appsettings.json'daki "DefaultConnection" ile verilir.
+        public PortfolyoContext(DbContextOptions<PortfolyoContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=PortfolyoDb;Integrated Security=True;TrustServerCertificate=True");
         }
+
         public DbSet<Experience> Experiences { get; set; }
         public DbSet<HeroSection> HeroSections { get; set; }
         public DbSet<HeroTitle> HeroTitles { get; set; }

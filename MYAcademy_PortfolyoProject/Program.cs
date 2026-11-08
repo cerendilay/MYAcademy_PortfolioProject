@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MYAcademy_PortfolyoProject.Context;
 using MYAcademy_PortfolyoProject.Services;
 
@@ -9,7 +10,8 @@ System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = turkishCulture;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<PortfolyoContext>();
+builder.Services.AddDbContext<PortfolyoContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ImageUploadService>();
 
 var app = builder.Build();
@@ -35,6 +37,6 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Default}/{action=Index}/{id?}");
 
 app.Run();

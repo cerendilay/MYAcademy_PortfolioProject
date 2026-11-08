@@ -4,16 +4,13 @@ using System.Diagnostics;
 
 namespace MYAcademy_PortfolyoProject.Controllers
 {
+    // Portfolyo sitesi DefaultController üzerinden çalışır.
+    // Bu controller yalnızca hata sayfası (UseExceptionHandler) için tutulur.
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return RedirectToAction("Index", "Default");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
